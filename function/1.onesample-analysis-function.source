@@ -1,0 +1,1086 @@
+# author:zhang jian
+# date:2023.8.11
+# version:1.0v
+# description: this is R function merge doc for scRNA-seq
+################################################################################
+# set pint witdth dafult:100
+width_print <- NA
+# function1:create dir
+create_dir <- function(list_dir){
+  for (i in list_dir) {
+    if(! dir.exists(i)){
+      dir.create(i)
+    }
+  }
+  cat("\n")
+  cat(cyan("create dir finish!!!!"))
+  cat("\n")
+}
+# function2:print run condition
+print_color_note <- function(logo){
+  # input print with print
+  if (is.na(width_print)){
+    width_print <- 100
+  }else{
+    width_print <- width_print
+  }
+  # print subfactor of print dafult:(●´∀｀●)ﾉ
+  logo_style_1 <- "(●´∀｀●)ﾉ"
+  logo_style_2 <- "(￣▽￣)~*"
+  padded_text_style1 <- str_pad(logo_style_1, width=width_print, pad = "#", side = "both")
+  padded_text_style2 <- str_pad(logo_style_2, width=width_print, pad = "#", side = "both")
+  # pint
+  cat(bold(cyan(padded_text_style1)),"\n")
+  cat("\n")
+  cat(bold(str_pad(logo, width=width_print, pad = " ", side = "both"),"\n"))
+  cat("\n")
+  cat(bold(cyan(padded_text_style2)))
+  cat("\n")
+}
+# function3:print run condition
+print_color_note_warring <- function(logo){
+  # input print with print
+  if (is.na(width_print)){
+    width_print <- 100
+  }else{
+    width_print <- width_print
+  }
+  # print subfactor of print dafult:(●´∀｀●)ﾉ
+  logo_style_1 <- "(σ｀д′)σ"
+  logo_style_2 <- "(σ｀д′)σ"
+  padded_text_style1 <- str_pad(logo_style_1, width=width_print, pad = "#", side = "both")
+  padded_text_style2 <- str_pad(logo_style_2, width=width_print, pad = "#", side = "both")
+  # pint
+  cat(bold(bgRed(padded_text_style1)),"\n")
+  cat("\n")
+  cat(bold(str_pad(logo, width=width_print, pad = " ", side = "both"),"\n"))
+  cat("\n")
+  cat(bold(bgRed(padded_text_style2)))
+  cat("\n")
+}
+# function3:print run condition
+print_color_note_NOTE <- function(logo){
+  # input print with print
+  if (is.na(width_print)){
+    width_print <- 100
+  }else{
+    width_print <- width_print
+  }
+  # print subfactor of print dafult:(●´∀｀●)ﾉ
+  logo_style_1 <- "(σ｀д′)σ"
+  logo_style_2 <- "(σ｀д′)σ"
+  padded_text_style1 <- str_pad(logo_style_1, width=width_print, pad = "#", side = "both")
+  padded_text_style2 <- str_pad(logo_style_2, width=width_print, pad = "#", side = "both")
+  # pint
+  cat(bold(cyan(padded_text_style1)),"\n")
+  cat("\n")
+  cat(bold(str_pad(logo, width=width_print, pad = " ", side = "both"),"\n"))
+  cat("\n")
+  cat(bold(cyan(padded_text_style2)))
+  cat("\n")
+}
+# function4:print run condition
+print_color_note_UP <- function(logo){
+  # input print with print
+  if (is.na(width_print)){
+    width_print <- 100
+  }else{
+    width_print <- width_print
+  }
+  # print subfactor of print dafult:(●´∀｀●)ﾉ
+  logo_style_1 <- "(●´∀｀●)ﾉ"
+  logo_style_2 <- "(￣▽￣)~*"
+  padded_text_style1 <- str_pad(logo_style_1, width=width_print, pad = "#", side = "both")
+  padded_text_style2 <- str_pad(logo_style_2, width=width_print, pad = "#", side = "both")
+  # pint
+  cat(bold(cyan(padded_text_style1)),"\n")
+  cat("\n")
+  cat(bold(str_pad(logo, width=width_print, pad = " ", side = "both"),"\n"))
+  cat("\n")
+}
+# function5:print run condition
+print_color_note_DOWN <- function(logo){
+  # input print with print
+  if (is.na(width_print)){
+    width_print <- 100
+  }else{
+    width_print <- width_print
+  }
+  # print subfactor of print dafult:(●´∀｀●)ﾉ
+  logo_style_1 <- "(●´∀｀●)ﾉ"
+  logo_style_2 <- "(￣▽￣)~*"
+  padded_text_style1 <- str_pad(logo_style_1, width=width_print, pad = "#", side = "both")
+  padded_text_style2 <- str_pad(logo_style_2, width=width_print, pad = "#", side = "both")
+  # pint
+  cat("\n")
+  cat(bold(str_pad(logo, width=width_print, pad = " ", side = "both"),"\n"))
+  cat("\n")
+  cat(bold(cyan(padded_text_style2)))
+  cat("\n")
+}
+# function6:draw scRNA-seq raw DATA QC figure
+sc_RNA_seq_raw_qc <- function(data){
+  # print run condition
+  cat("\n")
+  cat(cyan("DRAW scRNA-seq RAW data plot DO!!!!!!!"))
+  cat("\n")
+  # draw plot
+  p <- VlnPlot(data,
+               features = c("nFeature_RNA", "nCount_RNA", "percent.mt"),
+               ncol = 3,
+               cols="#1ee3cf",
+               pt.size=0.05,
+               combine = TRUE)
+  # plot figure
+  print(p)
+  # save plot pdf png format
+  ggsave(file.path(figure_dir,paste0("figure1_",project_name," raw data qc.pdf")),plot = p,width = 20,height = 20,units = "cm",device = "pdf")
+  ggsave(file.path(figure_dir,paste0("figure1_",project_name," raw data qc.png")),plot = p,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  cat("\n")
+  cat(cyan("DRAW scRNA-seq RAW data plot DONE!!!!!!!","\n"))
+  cat("\n")
+}
+# function7:draw feature-feature relationships plot
+visualize_feature_feature_plot <- function(data){
+  # draw nCount_RNA  percent.mt relationships plot
+  plot1 <- FeatureScatter(data, feature1 = "nCount_RNA", feature2 = "percent.mt")
+  print(plot1)
+  # save plot
+  ggsave(file.path(figure_dir,paste0(project_name," nCount_RNA-percent.mt.pdf")),plot = plot1,width = 20,height = 20,units = "cm",device = "pdf")
+  ggsave(file.path(figure_dir,paste0(project_name," nCount_RNA-percent.mt.png")),plot = plot1,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
+  # draw nCount_RNA  nFeature_RNA relationships plot
+  plot2 <- FeatureScatter(data, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+  print(plot2)
+  # save plot
+  ggsave(file.path(figure_dir,paste0("figure2_",project_name," nCount_RNA-nFeature_RNA.pdf")),plot = plot2,width = 20,height = 20,units = "cm",device = "pdf")
+  ggsave(file.path(figure_dir,paste0("figure2_",project_name," nCount_RNA-nFeature_RNA.png")),plot = plot2,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
+}
+# function8:draw scRNA-seq raw DATA QC figure
+sc_RNA_seq_filted_qc <- function(data){
+  # print run condition
+  cat("\n")
+  cat(cyan("DRAW scRNA-seq filted data plot DO!!!!!!!"))
+  cat("\n")
+  # draw plot
+  p <- VlnPlot(data,
+               features = c("nFeature_RNA", "nCount_RNA", "percent.mt"),
+               ncol = 3,
+               cols="#1ee3cf",
+               pt.size=0.05,
+               combine = TRUE)
+  print(p)
+  # save plot pdf png format
+  ggsave(file.path(figure_dir,paste0("figure3_",project_name," filted data qc.pdf")),plot = p,width = 20,height = 20,units = "cm",device = "pdf")
+  ggsave(file.path(figure_dir,paste0("figure3_",project_name," filted data qc.png")),plot = p,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  cat("\n")
+  cat(cyan("DRAW scRNA-seq filted data plot DONE!!!!!!!","\n"))
+  cat("\n")
+}
+# function9:draw top10 highly variable genes
+visualize_top10_HVG <- function(data,top10){
+  # print run condition
+  cat("\n")
+  cat(cyan("DRAW Top10 highly variable genes plot DO!!!!!!!","\n"))
+  cat("\n")
+  # DRAW PLOT
+  plot1 <- VariableFeaturePlot(data)
+  # ADD LABLE
+  plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+  # ADD other ggplot factor
+  p <-  plot2 +
+    ggtitle(paste0(project_name," Top10 highly variable genes"))+
+    scale_y_continuous(n.breaks = 10,expand = c(0,0)) +
+    theme_classic()+
+    theme(plot.title = element_text(hjust = 0.5),
+          legend.position = 'bottom',
+          legend.title=element_text(size = 15,face = "normal",family="Times"), 
+          text = element_text(size = 9,family="sans"),title = element_text(size = 7),           
+          axis.title.x = element_text(size = 7),axis.title.y = element_text(size = 7),    
+          axis.text.x = element_text(size = 5),axis.text.y = element_text(size = 5),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  print(p)
+  # save plot
+  # save plot pdf png format
+  ggsave(file.path(figure_dir,paste0("figure4_",project_name," Top10 highly variable genes.pdf")),plot = p,width = 10,height = 10,units = "cm",device = "pdf")
+  ggsave(file.path(figure_dir,paste0("figure4_",project_name," Top10 highly variable genes.png")),plot = p,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  cat("\n")
+  cat(cyan("DRAW Top10 highly variable genes plot DO!!!!!!!","\n"))
+  cat("\n")
+}
+# function10:draw all pca heatmaps
+draew_all_PCA_HEATMAP <- function(data){
+  # GET pca number
+  PCA_NUMBER <- dim(data[["pca"]])[2]
+  # process 
+  pb <- progress_bar$new(
+    format = 'Waitting [:bar] :percent in :elapsed',
+    total = PCA_NUMBER, clear = FALSE, width = 100
+  )
+  # print run condition
+  cat("\n")
+  cat(cyan("PCA HEATMAP PLOT DO!!!!!"))
+  cat("\n")
+  # draw plot
+  for (i in c(1:PCA_NUMBER)){
+    # set save format & file parameter
+    png(file.path(PCA_heatmap_dir,paste0("figure5_","PCA","-",i,".png")),width = 2000, height = 2000, units = "px",pointsize = 12,res=300)
+    # draw plot
+    DimHeatmap(data, dims = i, cells = 500, balanced = TRUE)
+    # close draw
+    dev.off()
+    pb$tick()
+  }
+  # print run condition
+  cat("\n")
+  cat(cyan("PCA HEATMAP PLOT DONE!!!!!"))
+  cat("\n")
+}
+# function11:draw all pca POINT
+draew_all_PCA_point_plot <- function(data){
+  # get pca number
+  PCA_NUMBER <- dim(data[["pca"]])[2]
+  # process 
+  pb <- progress_bar$new(
+    format = 'Waitting [:bar] :percent in :elapsed',
+    total = PCA_NUMBER, clear = FALSE, width = 100
+  )
+  # print run condition
+  cat("\n")
+  cat(cyan("PCA POINT PLOT DO!!!!!"))
+  cat("\n")
+  # draw everyone PCA  result
+  for (i in c(1:PCA_NUMBER)){
+    p <- VizDimLoadings(data, col="#001871" ,dims = i, reduction = "pca")
+    p1 <- p + ggtitle(paste0("PCA",i," point"))+
+      theme_classic()+
+      theme(plot.title = element_text(hjust = 0.5),
+            legend.position = 'bottom',
+            legend.title=element_text(size = 15,face = "normal",family="Times"), 
+            text = element_text(size = 9,family="sans"),title = element_text(size = 7),           
+            axis.title.x = element_text(size = 7),axis.title.y = element_text(size = 7),    
+            axis.text.x = element_text(size = 5),axis.text.y = element_text(size = 5),
+            axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+            axis.line.y=element_line(linetype=1,color="black",size=0.2),
+            axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+            axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+    # save
+    ggsave(file.path(PCA_point_dir,paste0("figure6_","PCA","-",i,".pdf")),plot=p1,width = 10,height = 10,units = "cm",device = "pdf")
+    ggsave(file.path(PCA_point_dir,paste0("figure6_","PCA","-",i,".png")),plot=p1,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
+    pb$tick()
+  }
+  cat("\n")
+  cat(cyan("PCA POINT PLOT DONE!!!!!"))
+  cat("\n")
+}
+# function12:draw dim POINT
+draw_dimplot <- function(data){
+  P <- DimPlot(data, reduction = "pca",pt.size=1.3,label.size=20,alpha=0.8,cols="#5bd1d7")
+  p1 <- P + theme_classic()+
+    ggtitle(paste0(project_name," Dimplot")) +
+    labs(x="PCA-1",y="PCA-2")+
+    scale_y_continuous(n.breaks = 10) +
+    scale_x_continuous(n.breaks = 10) +
+    theme(plot.title = element_text(hjust = 0.5,size = 10),
+          legend.position="bottom",
+          legend.title=element_text(size = 10,face = "normal",family="Times"), 
+          text = element_text(size = 9,family="sans"),title = element_text(size = 7),           
+          axis.title.x = element_text(size = 10),axis.title.y = element_text(size = 10),    
+          axis.text.x = element_text(size = 5),axis.text.y = element_text(size = 5),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  # ggsave
+  ggsave(file.path(PCA_DIM_dir,paste0("figure7_","PCA-DIM-plot.pdf")),plot=p1,width = 10,height = 10,units = "cm",device = "pdf")
+  ggsave(file.path(PCA_DIM_dir,paste0("figure7_","PCA-DIM-plot.png")),plot=p1,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  cat("\n")
+  cat(cyan("PCA dim PLOT DO!!!!!"))
+  cat("\n")
+}
+# function13:draw ‘significant’ PCs plot
+visablity_significant_pc <- function(data,NAME,PCs_cutoff){
+  p <- JackStrawPlot(data, dims = 1:PCs_cutoff)
+  p1 <- p +theme(plot.title = element_text(hjust = 0.5,size = 10),
+                 legend.position="bottom",
+                 legend.title=element_text(size = 5),
+                 legend.text=element_text(size = 5),
+                 text = element_text(size = 9),title = element_text(size = 7),           
+                 axis.title.x = element_text(size = 10),axis.title.y = element_text(size = 10),    
+                 axis.text.x = element_text(size = 5),axis.text.y = element_text(size = 5),
+                 axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+                 axis.line.y=element_line(linetype=1,color="black",size=0.2),
+                 axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+                 axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  print(p1)
+  # ggsave
+  ggsave(file.path(significant_PCs_dir,paste0(NAME,"significant-pc-plot.pdf")),plot=p1,width = 14,height = 10,units = "cm",device = "pdf")
+  ggsave(file.path(significant_PCs_dir,paste0(NAME,"significant-pc-plot.png")),plot=p1,width = 14,height = 10,units = "cm",device = "png",dpi=1200)
+  # print run condition
+  cat("\n")
+  cat(cyan("‘significant’ PCs PLOT DO!!!!!"))
+  cat("\n")
+}
+# function14:draw Elbow plot
+visablity_Elbow_plot <- function(data,NAME,PCs_cutoff){
+  p <- ElbowPlot(data,ndims = PCs_cutoff)
+  p1 <- p + 
+    scale_y_continuous(n.breaks = 10) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(plot.title = element_text(hjust = 0.5,size = 8),
+          legend.position="bottom",
+          legend.title=element_text(size = 8,face = "normal",family="Times"), 
+          text = element_text(size = 6,family="sans"),title = element_text(size = 6),           
+          axis.title.x = element_text(size = 6),axis.title.y = element_text(size = 6),    
+          axis.text.x = element_text(size = 4),axis.text.y = element_text(size = 4),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  print(p1)
+  # ggsave
+  ggsave(file.path(Elbow_plot_dir,paste0(NAME,"Elbow-plot.pdf")),plot=p1,width = 7,height = 5,units = "cm",device = "pdf")
+  ggsave(file.path(Elbow_plot_dir,paste0(NAME,"Elbow-plot.png")),plot=p1,width = 7,height = 5,units = "cm",device = "png",dpi=1200)
+  # print run condition
+  cat("\n")
+  cat(cyan("‘Elbow-plot DO!!!!!"))
+  cat("\n")
+}
+# function15:test cell cluster resolution
+test_cell_cluster_resolution <- function(data,name){
+  # data <- subset_maritx
+  # name <- "subset"
+  test <- FindClusters(data, resolution = seq(0.2, 2, 0.2))
+  clus.tree.out <- clustree(test)
+  print(clus.tree.out)
+  # save plot
+  ggsave(file.path(resolution_dir,paste0(name," clustree.pdf")),device = "pdf",width = 25,height = 30,units = "cm",plot = clus.tree.out)
+  ggsave(file.path(resolution_dir,paste0(name," clustree.png")),device = "png",width = 25,height = 30,units = "cm",plot = clus.tree.out,dpi=1000)
+}
+# function16:draw umap plot
+draw_umap_plot <- function(data,name){
+  # print run condition
+  cat("\n")
+  cat(cyan("PCA dim PLOT (UMAP) DO!!!!!"))
+  cat("\n")
+  p <- DimPlot(data, reduction = "umap") 
+  p1 <- p +
+    geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
+    geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
+    theme_classic()+
+    ggtitle(paste0(project_name," UMAP plot")) +
+    labs(x="UMAP-1",y="UMAP-2")+
+    scale_y_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 15),
+          legend.position="bottom",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10),
+          axis.title.y = element_text(size = 10),    
+          axis.text.x = element_text(size = 6),
+          axis.text.y = element_text(size = 6),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(color=guide_legend(nrow=2,title="Cluster-ID",title.position = "left",override.aes = list(size=2.5,alpha=0.8)))
+  # ggsave
+  ggsave(file.path(UMAP_dir,paste0(name," UMAP-plot.pdf")),plot=p1,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(UMAP_dir,paste0(name," UMAP-plot.png")),plot=p1,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  cat("\n")
+  cat(cyan("PCA dim PLOT (UMAP) DONE!!!!!"))
+  cat("\n")
+  return(p1)
+}
+# function17:draw tsne plot
+draw_tsne_plot <- function(data,name){
+  # print run condition
+  cat("\n")
+  cat(cyan("PCA dim PLOT (tSNE) DO!!!!!"))
+  cat("\n")
+  p <- DimPlot(data, reduction = "tsne") 
+  p1 <- p +
+    geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
+    geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
+    theme_classic()+
+    ggtitle(paste0(project_name," tSNE plot")) +
+    labs(x="tSNE-1",y="tSNE-2")+
+    scale_y_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 15),
+          legend.position="bottom",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10),
+          axis.title.y = element_text(size = 10),    
+          axis.text.x = element_text(size = 6),
+          axis.text.y = element_text(size = 6),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(color=guide_legend(nrow=2,title="Cluster-ID",title.position = "left",override.aes = list(size=2.5,alpha=0.8)))
+  # ggsave
+  ggsave(file.path(tsne_dir,paste0(name,"tSNE-plot.pdf")),plot=p1,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(tsne_dir,paste0(name,"tSNE-plot.png")),plot=p1,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  cat("\n")
+  cat(cyan("PCA dim PLOT (tSNE) DONE!!!!!"))
+  cat("\n")
+  return(p1)
+}
+# function18:find everyone cell cluster marker
+find_everyone_cell_cluster_marker <- function(data){
+  # test parameter
+  # data <- GENOMIC10XDATA_maritx_filted_normal_scale
+  number <- length(unique(data$seurat_clusters))
+  # analysis everyone cell cluster marker gene
+  for (i in c(1:number)){
+    # print run condition
+    cat("\n")
+    cat(cyan(paste0("Find cluster ",i-1," marker gene !!!!!!!!")))
+    cat("\n")
+    # findmarkers gene
+    temp.markers <- FindMarkers(data, ident.1 = (i-1), min.pct = 0.25)
+    # save cluster marker gene
+    write.csv(temp.markers,file.path(cluster_dir,paste0("cluster ",i-1," marker gene list.csv")))
+    print_color_note_UP(paste0(" Cluster ",i-1," marker gene ⬇️!!"))
+    print(head(temp.markers))
+    print_color_note_DOWN(paste0(" Cluster ",i-1," marker gene ⬆️!!"))
+  }
+}
+# function19:find everyone cell cluster marker
+marker_gene_Ontology_symbol_convert <- function(data){
+  # teat parameter
+  # data <- get_all_cluster_top10_marker_gene
+  temp <- homologene(data$gene, inTax = origin_tax_ID, outTax = homologene_id)
+  temp <- temp[,-c(3:4)]
+  colnames(temp) <- c("gene","homologene")
+  temp <- left_join(data,temp,by="gene")
+  return(temp)
+}
+# function20:DoHeatmap plot 
+DoHeatmap_plot <- function(markers,data,top_num){
+  # print run condition
+  cat("\n")
+  cat(cyan("DoHeatmap PLOT DO!!!!!"))
+  cat("\n")
+  markers %>%
+    group_by(cluster) %>%
+    top_n(n = top_num, wt = avg_log2FC) -> top
+  p <- DoHeatmap(data, features = top$gene) 
+  ggsave(file.path(DoHeatmap_dir,paste0(project_name,"DoHeatmap_plot.pdf")),device = "pdf",width = 24,height = 15,plot = p)
+  ggsave(file.path(DoHeatmap_dir,paste0(project_name,"DoHeatmap_plot.png")),device = "png",width = 24,height = 15,plot = p,dpi=1200)
+  # print run condition
+  cat("\n")
+  cat(cyan("DoHeatmap PLOT DONE!!!!!"))
+  cat("\n")
+}
+# function21:maritx gene symbol convert
+count_maritx_symbol_convert <- function(data){
+  if (wheather_convert_maritx_symbol==F){
+    annotation_maritx <- data@assays$RNA@data
+  }else{
+    # get 10Xgenomic maritx infor
+    annotation_maritx <- data@assays$RNA@data
+    # maritx rowname convert
+    homologene_symbol <- homologene(rownames(annotation_maritx), inTax = origin_tax_ID, outTax = homologene_id)
+    # remove other colname
+    homologene_symbol <- homologene_symbol[,-c(3:4)]
+    # get convert id list
+    homologene_list <- homologene_symbol[,2]
+    # name convert id list 
+    names(homologene_list) <- homologene_symbol[,1]
+    # head(homologene_list)
+    # get convert id list
+    new_row_names <- homologene_list[match(rownames(annotation_maritx), names(homologene_list))]
+    # convert ID
+    rownames(annotation_maritx) <- new_row_names
+  }
+  return(annotation_maritx)
+}
+# function22:use singleR auto annotation cell type
+SingleR_cell_type_annotation <- function(data,name,ref_data){
+  # 10X genomic count maritx gene id convert
+  maritx <- count_maritx_symbol_convert(data)
+  # use SingleR annotation cell type
+  pred <- SingleR(test = maritx,
+                  ref = ref_data,
+                  labels = ref_data$label.fine,
+                  method = "cluster",
+                  clusters = data$seurat_clusters)
+  # get annotation cell type data
+  annotation_data <- data.frame(cluster_ID=paste0("Cluster ",rownames(pred)),
+                                cell_cluster_type=pred$labels)
+  # save annotation result
+  write.csv(annotation_data,file.path(annotation_dir,paste0(name," auto annotation reslut.csv")))
+  # print run condition
+  print_color_note_UP("Cell annotation result ⬇️!!!!")
+  # print annotation data
+  print(annotation_data)
+  # print run condition
+  print_color_note_DOWN("Cell annotation result ⬆️ !!!!")
+  return(pred)
+}
+# function23: draw annotation plot UMAP 
+draw_umap_annotation_plot <- function(data,name){
+  # print run condition
+  cat("\n")
+  cat(cyan(paste0("PCA annotation ",name," PLOT (UMAP) DO!!!!!")))
+  cat("\n")
+  p <- DimPlot(data , reduction = "umap", label = TRUE, pt.size = 0.5)
+  p1 <- p +
+    geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
+    geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
+    theme_classic()+
+    ggtitle(paste0(project_name," UMAP plot")) +
+    labs(x="UMAP-1",y="UMAP-2")+
+    scale_y_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 15),
+          legend.position="bottom",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10),
+          axis.title.y = element_text(size = 10),    
+          axis.text.x = element_text(size = 6),
+          axis.text.y = element_text(size = 6),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(color=guide_legend(nrow=3,title="Cluster-ID",title.position = "left",override.aes = list(size=2.5,alpha=0.8)))
+  # ggsave
+  ggsave(file.path(annotation_figure_dir,paste0(name," UMAP-plot.pdf")),plot=p1,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(annotation_figure_dir,paste0(name," UMAP-plot.png")),plot=p1,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  cat("\n")
+  cat(cyan(paste0("PCA annotation ",name," PLOT (UMAP) DONE!!!!!","\n")))
+  cat("\n")
+}
+# function24: AUTO ANNOTATION EVERYONE DATA set
+auto_everyone_dataset <- function(data){
+  #Blueprint-ENCODE
+  # set annotation parameter
+  ref <- refer_data_set_1
+  name <- "Blueprint-ENCODE"
+  # use SingleR annotation cell stype
+  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
+  # draw Annotation diagnostics
+  p <- plotScoreHeatmap(auto_annotation_rersult)
+  # ggsave
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # draw annotation plot
+  test <- data
+  new.cluster.ids <- auto_annotation_rersult$pruned.labels
+  names(new.cluster.ids) <- levels(test)
+  test  <- RenameIdents(test , new.cluster.ids)
+  draw_umap_annotation_plot(test,name)
+  ############Mouse bulk rna-seq############
+  # set annotation parameter
+  ref <- refer_data_set_2
+  name <- "Mouse bulk rna-seq"
+  # use SingleR annotation cell stype
+  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
+  # draw Annotation diagnostics
+  p <- plotScoreHeatmap(auto_annotation_rersult)
+  # ggsave
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # draw annotation plot
+  test <- data
+  new.cluster.ids <- auto_annotation_rersult$pruned.labels
+  names(new.cluster.ids) <- levels(test)
+  test  <- RenameIdents(test , new.cluster.ids)
+  draw_umap_annotation_plot(test,name)
+  ############Mouse Immunological############
+  # set annotation parameter
+  ref <- refer_data_set_3
+  name <- "Mouse Immunological"
+  # use SingleR annotation cell stype
+  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
+  # draw Annotation diagnostics
+  p <- plotScoreHeatmap(auto_annotation_rersult)
+  # ggsave
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # draw annotation plot
+  test <- data
+  new.cluster.ids <- auto_annotation_rersult$pruned.labels
+  names(new.cluster.ids) <- levels(test)
+  test  <- RenameIdents(test , new.cluster.ids)
+  draw_umap_annotation_plot(test,name)
+  ############Immune Cell Expression############
+  # set annotation parameter
+  ref <- refer_data_set_4
+  name <- "Immune Cell Expression"
+  # use SingleR annotation cell stype
+  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
+  # draw Annotation diagnostics
+  p <- plotScoreHeatmap(auto_annotation_rersult)
+  # ggsave
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # draw annotation plot
+  test <- data
+  new.cluster.ids <- auto_annotation_rersult$pruned.labels
+  names(new.cluster.ids) <- levels(test)
+  test  <- RenameIdents(test , new.cluster.ids)
+  draw_umap_annotation_plot(test,name)
+  ############Novershtern hematopoietic############
+  # set annotation parameter
+  ref <- refer_data_set_5
+  name <- "Novershtern hematopoietic"
+  # use SingleR annotation cell stype
+  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
+  # draw Annotation diagnostics
+  p <- plotScoreHeatmap(auto_annotation_rersult)
+  # ggsave
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # draw annotation plot
+  test <- data
+  new.cluster.ids <- auto_annotation_rersult$pruned.labels
+  names(new.cluster.ids) <- levels(test)
+  test  <- RenameIdents(test , new.cluster.ids)
+  draw_umap_annotation_plot(test,name)
+  ############Monaco immune data############
+  # set annotation parameter
+  ref <- refer_data_set_6
+  name <- "Monaco immune data"
+  # use SingleR annotation cell stype
+  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
+  # draw Annotation diagnostics
+  p <- plotScoreHeatmap(auto_annotation_rersult)
+  # ggsave
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  # draw annotation plot
+  test <- data
+  new.cluster.ids <- auto_annotation_rersult$pruned.labels
+  names(new.cluster.ids) <- levels(test)
+  test  <- RenameIdents(test , new.cluster.ids)
+  draw_umap_annotation_plot(test,name)
+}
+# function25: MANUAL ANNOTATION EVERYONE DATA set
+manual_annotation_figure <- function(data,genes_to_check){
+  # print run condition
+  cat("\n")
+  cat(cyan(paste0("manual annotation ",genes_to_check," PLOT  DO!!!!!")))
+  cat("\n")
+  # draw  DotPlot
+  p1 <- DotPlot(data, features = genes_to_check,assay='RNA')+
+    theme_classic()+
+    ggtitle(paste0(project_name," DotPlot for  special gene")) +
+    labs(x="Feature",y="cell cluster ID")+
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 12),
+          legend.position="right",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10,face="bold"),
+          axis.title.y = element_text(size = 10,face="bold"),    
+          axis.text.x = element_text(size = 8,face="bold"),
+          axis.text.y = element_text(size = 8,face="bold"),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  # draw VlnPlot
+  p2 <- VlnPlot(data, features = genes_to_check)+
+    theme_classic()+
+    labs(x="cell cluster ID",y="Expression level")+
+    scale_y_continuous(expand = c(0,0),n.breaks = 6) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 15),
+          legend.position="none",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10,face="bold"),
+          axis.title.y = element_text(size = 10,face="bold"),    
+          axis.text.x = element_text(size = 8,face="bold"),
+          axis.text.y = element_text(size = 8,face="bold"),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  # draw FeaturePlot
+  p3 <- FeaturePlot(data, features = genes_to_check)+
+    geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
+    geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
+    theme_classic()+
+    ggtitle(paste0(project_name," ",genes_to_check," UMAP plot")) +
+    labs(x="UMAP-1",y="UMAP-2")+
+    scale_y_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 15),
+          legend.position="bottom",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10),
+          axis.title.y = element_text(size = 10),    
+          axis.text.x = element_text(size = 6),
+          axis.text.y = element_text(size = 6),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(color=guide_legend(nrow=2,title="Cluster-ID",title.position = "left",override.aes = list(size=2.5,alpha=0.8)))
+  # merge plot
+  all_p <- ggarrange(umap_plot,p3,p1,p2,ncol=2,nrow=2,labels=c("A","B","C","D"))
+  # print plot
+  print(all_p)
+  # save plot
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.pdf")),device = "pdf",width = 10,height = 12,plot=all_p)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.png")),device = "png",width = 10,height = 12,plot=all_p,dpi=600)
+  # print run condition
+  cat("\n")
+  cat(cyan(paste0("manual annotation ",genes_to_check," PLOT  DONE!!!!!")))
+  cat("\n")
+}
+# function26: annotation_cell_cluster_name tsne
+annotation_cell_cluster_name <- function(data,new.cluster.ids){
+  #data <- GENOMIC10XDATA_maritx_filted_normal_scale
+  names(new.cluster.ids) <- levels(data)
+  rename_data <- RenameIdents(data, new.cluster.ids)
+  p <-  DimPlot(rename_data, reduction = "tsne", label = TRUE, pt.size = 0.25,label.size=1.5) + NoLegend() +
+    geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
+    geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
+    theme_classic()+
+    ggtitle(paste0(project_name," tSNE plot")) +
+    labs(x="tSNE-1",y="tSNE-2")+
+    scale_y_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 5),
+          legend.position="right",
+          legend.title=element_text(size = 7,face="bold"), 
+          text = element_text(size = 4,family="sans"),           
+          axis.title.x = element_text(size = 5),
+          axis.title.y = element_text(size = 5),    
+          axis.text.x = element_text(size = 3),
+          axis.text.y = element_text(size = 3),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(color=guide_legend(title="Cluster-ID",title.position = "top",override.aes = list(size=2,alpha=0.8)))
+  # save
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("tSNE-annotation-plot.pdf")),plot=p,width = 12,height = 8,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("tSNE-annotation-plot.png")),plot=p,width = 12,height = 8,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  p <-  DimPlot(rename_data, reduction = "umap", label = TRUE, pt.size = 0.25,label.size=1.5) + NoLegend() +
+    geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
+    geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
+    theme_classic()+
+    ggtitle(paste0(project_name," UMAP plot")) +
+    labs(x="UMAP-1",y="UMAP-2")+
+    scale_y_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 5),
+          legend.position="right",
+          legend.title=element_text(size = 7,face="bold"), 
+          text = element_text(size = 4,family="sans"),           
+          axis.title.x = element_text(size = 5),
+          axis.title.y = element_text(size = 5),    
+          axis.text.x = element_text(size = 3),
+          axis.text.y = element_text(size = 3),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(color=guide_legend(title="Cluster-ID",title.position = "top",override.aes = list(size=2,alpha=0.8)))
+  # save
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("UMAP-annotation-plot.pdf")),plot=p,width = 12,height = 8,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("UMAP-annotation-plot.png")),plot=p,width = 12,height = 8,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  return(rename_data)
+}
+# function27: annotation_cell_cluster_name doplot
+draw_annotation_cell_cluster_doplot <- function(data,genes_to_check){
+  #data <- rename_maritx
+  p<- DotPlot(data, features = genes_to_check,assay='RNA',dot.scale=2.5) + 
+    coord_flip()+
+    theme_classic()+
+    ggtitle(paste0(project_name," Dimplot")) +
+    labs(x="",y="")+
+    theme(plot.title = element_text(hjust = 0.5,size = 8),
+          legend.position="right",
+          legend.title=element_text(size = 5), 
+          text = element_text(size = 9),title = element_text(size = 7),           
+          axis.title.x = element_text(size = 8),axis.title.y = element_text(size = 7),    
+          axis.text.x = element_text(size = 5,angle=45,hjust=0.9,vjust=0.9),axis.text.y = element_text(size = 5),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  print(p)
+  # save plot
+  # save
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("annotation-DotPlot.pdf")),plot=p,width = 8,height = 11,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("annotation-DotPlot.png")),plot=p,width = 8,height = 11,units = "cm",device = "png",dpi=1000)
+  # print run condition
+}
+# function27: annotation_cell_cluster_name vinplot
+draw_annotation_cell_cluster_VlnPlot <- function(data,genes_to_check){
+  #data <- rename_maritx
+  p<- VlnPlot(data, features = genes_to_check,assay='RNA',stack = TRUE,flip = T, fill.by='ident') 
+  print(p)
+  # save plot
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("annotation-VlnPlot.pdf")),plot=p,width = 8,height = 11,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("annotation-VlnPlot.png")),plot=p,width = 8,height = 11,units = "cm",device = "png",dpi=1000)
+  # print run condition
+}
+# function28: states cell cluster rate
+states_cell_cluster_rate <- function(data,group_name,name){
+  if (length(levels(data@active.ident)) < 8){
+    ncol = 1
+    width = 8
+  }else{
+    if (length(levels(data@active.ident)) < 16){
+      ncol = 2
+      width = 11
+    }else{
+      if (length(levels(data@active.ident)) < 24){
+        ncol = 3
+        width = 14
+      }
+    }
+  }
+  rate_data <- as.data.frame(prop.table(table(Idents(data))))
+  rate_data$Freq <- rate_data$Freq*100
+  colnames(rate_data)[1] <- "Cell_cluster_name"
+  colnames(rate_data)[2] <- "frequently"
+  rate_data$group_name <- group_name
+  colour1 <- c("#DC143C","#0000FF","#20B2AA","#FFA500","#9370DB","#98FB98","#F08080","#1E90FF","#7CFC00","#FFFF00","#808000","#FF00FF","#FA8072","#7B68EE","#9400D3","#800080","#A0522D","#D2B48C","#D2691E","#87CEEB","#40E0D0","#5F9EA0","#FF1493","#0000CD","#008B8B","#FFE4B5","#8A2BE2","#228B22","#E9967A","#4682B4","#32CD32","#F0E68C","#FFFFE0","#EE82EE","#FF6347","#6A5ACD","#9932CC","#8B008B","#8B4513","#DEB887")
+  p <- ggplot(rate_data,aes(x=group_name,y=frequently,fill=Cell_cluster_name))+
+    geom_bar(position = 'stack',stat="identity",width=0.4)+
+    labs(x="group name",y = "cell cluster frequently (%)",title = "WT Cell cluster rate")+
+    scale_fill_manual(values=colour1)+
+    scale_y_continuous(expand = c(0,0),n.breaks = 10) +
+    theme_classic()+
+    theme(plot.title = element_text(hjust = 0.5,size =6,family="sans",face = "bold"),
+          legend.title=element_text(size =6,face = "bold",family="sans"), 
+          legend.text =element_text(size =4,face = "bold",family="sans"), 
+          text = element_text(size = 4,family="sans"),title = element_text(size = 4),           
+          axis.title.x = element_text(size = 5,family="sans",face = "bold"),axis.title.y = element_text(size = 5,family="sans",face = "bold"),    
+          axis.text.x = element_text(size = 4,family="sans"),axis.text.y = element_text(size = 4,family="sans"),
+          panel.border = element_rect(color = "#606c70", fill = NA, size = 0.3),
+          axis.line.x=element_line(linetype=1,color="#606c70",size=0.12),       
+          axis.line.y=element_line(linetype=1,color="#606c70",size=0.12),
+          axis.ticks.x=element_line(color="#606c70",size=0.12,lineend = 0.05),
+          axis.ticks.length=unit(.08,"lines"),
+          axis.ticks.y=element_line(color="#606c70",size=0.12,lineend = 0.05))+
+    guides(fill=guide_legend(ncol=ncol,title=NULL,override.aes = list(size=0.02,alpha=1)))
+  # save
+  write.csv(rate_data,file.path(output_dir,paste0(name," proportion_annotation-plot.csv")))
+  ggsave(file.path(proportions_dir,paste0(name," proportion_annotation-plot.pdf")),plot=p,width = width,height = 8,units = "cm",device = "pdf")
+  ggsave(file.path(proportions_dir,paste0(name," proportion_annotation-plot.png")),plot=p,width = width,height = 8,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  
+}
+# function29: states cell cluster rate
+DoHeatmap_plot_subset <- function(markers,data,top_num,name){
+  # print run condition
+  cat("\n")
+  cat(cyan("DoHeatmap PLOT DO!!!!!"))
+  cat("\n")
+  markers %>%
+    group_by(cluster) %>%
+    top_n(n = top_num, wt = avg_log2FC) -> top
+  p <- DoHeatmap(data, features = top$gene) 
+  ggsave(file.path(DoHeatmap_dir,paste0(project_name,name,"DoHeatmap_plot.pdf")),device = "pdf",width = 24,height = 15,plot = p)
+  ggsave(file.path(DoHeatmap_dir,paste0(project_name,name,"DoHeatmap_plot.png")),device = "png",width = 24,height = 15,plot = p,dpi=1200)
+  # print run condition
+  cat("\n")
+  cat(cyan("DoHeatmap PLOT DONE!!!!!"))
+  cat("\n")
+}
+# function30: states cell cluster rate
+subset_manual_annotation_figure <- function(data,genes_to_check){
+  # print run condition
+  cat("\n")
+  cat(cyan(paste0("manual annotation ",genes_to_check," PLOT  DO!!!!!")))
+  cat("\n")
+  # draw  DotPlot
+  p1 <- DotPlot(data, features = genes_to_check,assay='RNA')+
+    theme_classic()+
+    ggtitle(paste0(project_name," DotPlot for  special gene")) +
+    labs(x="Feature",y="cell cluster ID")+
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 12),
+          legend.position="right",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10,face="bold"),
+          axis.title.y = element_text(size = 10,face="bold"),    
+          axis.text.x = element_text(size = 8,face="bold"),
+          axis.text.y = element_text(size = 8,face="bold"),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  # draw VlnPlot
+  p2 <- VlnPlot(data, features = genes_to_check)+
+    theme_classic()+
+    labs(x="cell cluster ID",y="Expression level")+
+    scale_y_continuous(expand = c(0,0),n.breaks = 6) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 15),
+          legend.position="none",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10,face="bold"),
+          axis.title.y = element_text(size = 10,face="bold"),    
+          axis.text.x = element_text(size = 8,face="bold"),
+          axis.text.y = element_text(size = 8,face="bold"),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  # draw FeaturePlot
+  p3 <- FeaturePlot(data, features = genes_to_check)+
+    geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
+    geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
+    theme_classic()+
+    ggtitle(paste0(project_name," ",genes_to_check," UMAP plot")) +
+    labs(x="UMAP-1",y="UMAP-2")+
+    scale_y_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 15),
+          legend.position="bottom",
+          legend.title=element_text(size = 10), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 10),
+          axis.title.y = element_text(size = 10),    
+          axis.text.x = element_text(size = 6),
+          axis.text.y = element_text(size = 6),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(color=guide_legend(nrow=2,title="Cluster-ID",title.position = "left",override.aes = list(size=2.5,alpha=0.8)))
+  # merge plot
+  all_p <- ggarrange(umap_p,p3,p1,p2,ncol=2,nrow=2,labels=c("A","B","C","D"))
+  # print plot
+  print(all_p)
+  # save plot
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.pdf")),device = "pdf",width = 10,height = 12,plot=all_p)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.png")),device = "png",width = 10,height = 12,plot=all_p,dpi=600)
+  # print run condition
+  cat("\n")
+  cat(cyan(paste0("subset manual annotation ",genes_to_check," PLOT  DONE!!!!!")))
+  cat("\n")
+}
+# function31: states cell cluster rate
+annotation_cell_subset_cluster_name <- function(data,new.cluster.ids){
+  #data <- GENOMIC10XDATA_maritx_filted_normal_scale
+  names(new.cluster.ids) <- levels(data)
+  rename_data <- RenameIdents(data, new.cluster.ids)
+  p <-  DimPlot(rename_data, reduction = "umap", label = TRUE, pt.size = 0.25,label.size=1.5) + NoLegend() +
+    geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
+    geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
+    theme_classic()+
+    ggtitle(paste0(project_name," UMAP plot")) +
+    labs(x="UMAP-1",y="UMAP-2")+
+    scale_y_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = 20) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 5),
+          legend.position="right",
+          legend.title=element_text(size = 7,face="bold"), 
+          text = element_text(size = 4,family="sans"),           
+          axis.title.x = element_text(size = 5),
+          axis.title.y = element_text(size = 5),    
+          axis.text.x = element_text(size = 3),
+          axis.text.y = element_text(size = 3),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(color=guide_legend(title="Cluster-ID",title.position = "top",override.aes = list(size=2,alpha=0.8)))
+  # save
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("subset_UMAP-annotation-plot.pdf")),plot=p,width = 12,height = 8,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("subset_UMAP-annotation-plot.png")),plot=p,width = 12,height = 8,units = "cm",device = "png",dpi=1000)
+  # print run condition
+  return(rename_data)
+}
+# function32: states cell cluster rate
+draw_annotation_cell_subset_cluster_doplot <- function(data,genes_to_check){
+  #data <- rename_maritx
+  p<- DotPlot(data, features = genes_to_check,assay='RNA',dot.scale=2.5) + 
+    coord_flip()+
+    theme_classic()+
+    ggtitle(paste0(project_name," Dimplot")) +
+    labs(x="",y="")+
+    theme(plot.title = element_text(hjust = 0.5,size = 8),
+          legend.position="right",
+          legend.title=element_text(size = 5), 
+          text = element_text(size = 9),title = element_text(size = 7),           
+          axis.title.x = element_text(size = 8),axis.title.y = element_text(size = 7),    
+          axis.text.x = element_text(size = 5,angle=45,hjust=0.9,vjust=0.9),axis.text.y = element_text(size = 5),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
+  # save plot
+  # save
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("subset_annotation-DotPlot.pdf")),plot=p,width = 11,height = 11,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("subset_annotation-DotPlot.png")),plot=p,width = 11,height = 11,units = "cm",device = "png",dpi=1000)
+  # print run condition
+}
+# function27: annotation_cell_cluster_name vinplot
+draw_annotation_cell_subset_cluster_VlnPlot <- function(data,genes_to_check){
+  #data <- rename_maritx
+  p<- VlnPlot(data, features = genes_to_check,assay='RNA',stack = TRUE,flip = T, fill.by='ident') 
+  print(p)
+  # save plot
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("subset_annotation-VlnPlot.pdf")),plot=p,width = 8,height = 11,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("subset_annotation-VlnPlot.png")),plot=p,width = 8,height = 11,units = "cm",device = "png",dpi=1000)
+  # print run condition
+}
+# function33: states cell cluster rate
+states_subset_cell_cluster_rate <- function(rename_subset_maritx){
+  data <- as.data.frame(table(rename_subset_maritx@active.ident))
+  data$rate <- (data$Freq/sum(data$Freq))*100
+  p <- ggplot(data,aes(x=Var1,y=rate,fill=Var1))+
+    geom_bar(stat="identity")+
+    theme_classic()+
+    ggtitle(paste0(project_name," tSNE plot")) +
+    labs(x="Cell cluster name",y="cell cluster proportion (%)")+
+    scale_y_continuous(expand = c(0,0),limits = c(0,max(data$rate)*1.15)) +
+    theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
+          plot.title = element_text(hjust = 0.5,size = 10),
+          legend.position="none",
+          legend.title=element_text(size = 2,face="bold"), 
+          text = element_text(size = 8,family="sans"),           
+          axis.title.x = element_text(size = 8),
+          axis.title.y = element_text(size = 8),    
+          axis.text.x = element_text(size = 6,angle = 45,vjust=0.9,hjust=0.9),
+          axis.text.y = element_text(size = 6),
+          axis.line.x=element_line(linetype=1,color="black",size=0.2),       
+          axis.line.y=element_line(linetype=1,color="black",size=0.2),
+          axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
+          axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
+    guides(fill=guide_legend(title="Cluster-Name",title.position = "top",override.aes = list(size=0.5,alpha=0.8)))
+  # save
+  ggsave(file.path(proportions_dir,paste0("subset_proportion_annotation-plot.pdf")),plot=p,width = 8,height = 8,units = "cm",device = "pdf")
+  ggsave(file.path(proportions_dir,paste0("subset_proportion_annotation-plot.png")),plot=p,width = 8,height = 8,units = "cm",device = "png",dpi=1000)
+  # print run condition
+}
+################################################################################
