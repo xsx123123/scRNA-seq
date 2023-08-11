@@ -1,6 +1,6 @@
 # author:zhang jian
 # date:2023.8.11
-# version:1.0v
+# version:1.1v
 # description: this is R function merge doc for scRNA-seq
 ################################################################################
 # set pint witdth dafult:100
@@ -134,8 +134,8 @@ sc_RNA_seq_raw_qc <- function(data){
   # plot figure
   print(p)
   # save plot pdf png format
-  ggsave(file.path(figure_dir,paste0("figure1_",project_name," raw data qc.pdf")),plot = p,width = 20,height = 20,units = "cm",device = "pdf")
-  ggsave(file.path(figure_dir,paste0("figure1_",project_name," raw data qc.png")),plot = p,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
+  ggsave(file.path(qc_dir,paste0("figure-1 ",project_name," raw data qc.pdf")),plot = p,width = 20,height = 20,units = "cm",device = "pdf")
+  ggsave(file.path(qc_dir,paste0("figure-1 ",project_name," raw data qc.png")),plot = p,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
   # print run condition
   cat("\n")
   cat(cyan("DRAW scRNA-seq RAW data plot DONE!!!!!!!","\n"))
@@ -153,8 +153,8 @@ visualize_feature_feature_plot <- function(data){
   plot2 <- FeatureScatter(data, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
   print(plot2)
   # save plot
-  ggsave(file.path(figure_dir,paste0("figure2_",project_name," nCount_RNA-nFeature_RNA.pdf")),plot = plot2,width = 20,height = 20,units = "cm",device = "pdf")
-  ggsave(file.path(figure_dir,paste0("figure2_",project_name," nCount_RNA-nFeature_RNA.png")),plot = plot2,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
+  ggsave(file.path(qc_dir,paste0("figure-2 ",project_name," nCount_RNA-nFeature_RNA.pdf")),plot = plot2,width = 20,height = 20,units = "cm",device = "pdf")
+  ggsave(file.path(qc_dir,paste0("figure-2 ",project_name," nCount_RNA-nFeature_RNA.png")),plot = plot2,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
 }
 # function8:draw scRNA-seq raw DATA QC figure
 sc_RNA_seq_filted_qc <- function(data){
@@ -171,8 +171,8 @@ sc_RNA_seq_filted_qc <- function(data){
                combine = TRUE)
   print(p)
   # save plot pdf png format
-  ggsave(file.path(figure_dir,paste0("figure3_",project_name," filted data qc.pdf")),plot = p,width = 20,height = 20,units = "cm",device = "pdf")
-  ggsave(file.path(figure_dir,paste0("figure3_",project_name," filted data qc.png")),plot = p,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
+  ggsave(file.path(qc_dir,paste0("figure-3 ",project_name," filted data qc.pdf")),plot = p,width = 20,height = 20,units = "cm",device = "pdf")
+  ggsave(file.path(qc_dir,paste0("figure-3 ",project_name," filted data qc.png")),plot = p,width = 20,height = 20,units = "cm",device = "png",dpi=1000)
   # print run condition
   cat("\n")
   cat(cyan("DRAW scRNA-seq filted data plot DONE!!!!!!!","\n"))
@@ -206,8 +206,8 @@ visualize_top10_HVG <- function(data,top10){
   print(p)
   # save plot
   # save plot pdf png format
-  ggsave(file.path(figure_dir,paste0("figure4_",project_name," Top10 highly variable genes.pdf")),plot = p,width = 10,height = 10,units = "cm",device = "pdf")
-  ggsave(file.path(figure_dir,paste0("figure4_",project_name," Top10 highly variable genes.png")),plot = p,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
+  ggsave(file.path(qc_dir,paste0("figure-4 ",project_name," Top10 highly variable genes.pdf")),plot = p,width = 10,height = 10,units = "cm",device = "pdf")
+  ggsave(file.path(qc_dir,paste0("figure-4 ",project_name," Top10 highly variable genes.png")),plot = p,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
   # print run condition
   cat("\n")
   cat(cyan("DRAW Top10 highly variable genes plot DO!!!!!!!","\n"))
@@ -229,7 +229,7 @@ draew_all_PCA_HEATMAP <- function(data){
   # draw plot
   for (i in c(1:PCA_NUMBER)){
     # set save format & file parameter
-    png(file.path(PCA_heatmap_dir,paste0("figure5_","PCA","-",i,".png")),width = 2000, height = 2000, units = "px",pointsize = 12,res=300)
+    png(file.path(qc_dir,paste0("figure 5 ","PCA","-",i,".png")),width = 2000, height = 2000, units = "px",pointsize = 12,res=300)
     # draw plot
     DimHeatmap(data, dims = i, cells = 500, balanced = TRUE)
     # close draw
@@ -270,8 +270,8 @@ draew_all_PCA_point_plot <- function(data){
             axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
             axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
     # save
-    ggsave(file.path(PCA_point_dir,paste0("figure6_","PCA","-",i,".pdf")),plot=p1,width = 10,height = 10,units = "cm",device = "pdf")
-    ggsave(file.path(PCA_point_dir,paste0("figure6_","PCA","-",i,".png")),plot=p1,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
+    ggsave(file.path(pca_qc_dir,paste0("figure-6 ","PCA","-",i,".pdf")),plot=p1,width = 10,height = 10,units = "cm",device = "pdf")
+    ggsave(file.path(pca_qc_dir,paste0("figure-6 ","PCA","-",i,".png")),plot=p1,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
     pb$tick()
   }
   cat("\n")
@@ -297,15 +297,15 @@ draw_dimplot <- function(data){
           axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
           axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
   # ggsave
-  ggsave(file.path(PCA_DIM_dir,paste0("figure7_","PCA-DIM-plot.pdf")),plot=p1,width = 10,height = 10,units = "cm",device = "pdf")
-  ggsave(file.path(PCA_DIM_dir,paste0("figure7_","PCA-DIM-plot.png")),plot=p1,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
+  ggsave(file.path(dimplot_qc_dir,paste0("figure-7 ","PCA-DIM-plot.pdf")),plot=p1,width = 10,height = 10,units = "cm",device = "pdf")
+  ggsave(file.path(dimplot_qc_dir,paste0("figure-7 ","PCA-DIM-plot.png")),plot=p1,width = 10,height = 10,units = "cm",device = "png",dpi=1000)
   # print run condition
   cat("\n")
   cat(cyan("PCA dim PLOT DO!!!!!"))
   cat("\n")
 }
 # function13:draw ‘significant’ PCs plot
-visablity_significant_pc <- function(data,NAME,PCs_cutoff){
+visablity_significant_pc <- function(data,project_name,PCs_cutoff){
   p <- JackStrawPlot(data, dims = 1:PCs_cutoff)
   p1 <- p +theme(plot.title = element_text(hjust = 0.5,size = 10),
                  legend.position="bottom",
@@ -320,15 +320,15 @@ visablity_significant_pc <- function(data,NAME,PCs_cutoff){
                  axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
   print(p1)
   # ggsave
-  ggsave(file.path(significant_PCs_dir,paste0(NAME,"significant-pc-plot.pdf")),plot=p1,width = 14,height = 10,units = "cm",device = "pdf")
-  ggsave(file.path(significant_PCs_dir,paste0(NAME,"significant-pc-plot.png")),plot=p1,width = 14,height = 10,units = "cm",device = "png",dpi=1200)
+  ggsave(file.path(qc_dir,paste0("figure-8 ",project_name," significant-pc-plot.pdf")),plot=p1,width = 14,height = 10,units = "cm",device = "pdf")
+  ggsave(file.path(qc_dir,paste0("figure-8 ",project_name," significant-pc-plot.png")),plot=p1,width = 14,height = 10,units = "cm",device = "png",dpi=1200)
   # print run condition
   cat("\n")
   cat(cyan("‘significant’ PCs PLOT DO!!!!!"))
   cat("\n")
 }
 # function14:draw Elbow plot
-visablity_Elbow_plot <- function(data,NAME,PCs_cutoff){
+visablity_Elbow_plot <- function(data,project_name,PCs_cutoff){
   p <- ElbowPlot(data,ndims = PCs_cutoff)
   p1 <- p + 
     scale_y_continuous(n.breaks = 10) +
@@ -345,23 +345,24 @@ visablity_Elbow_plot <- function(data,NAME,PCs_cutoff){
           axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
   print(p1)
   # ggsave
-  ggsave(file.path(Elbow_plot_dir,paste0(NAME,"Elbow-plot.pdf")),plot=p1,width = 7,height = 5,units = "cm",device = "pdf")
-  ggsave(file.path(Elbow_plot_dir,paste0(NAME,"Elbow-plot.png")),plot=p1,width = 7,height = 5,units = "cm",device = "png",dpi=1200)
+  ggsave(file.path(qc_dir,paste0("figure-9 ",project_name," Elbow-plot.pdf")),plot=p1,width = 7,height = 5,units = "cm",device = "pdf")
+  ggsave(file.path(qc_dir,paste0("figure-9 ",project_name," Elbow-plot.png")),plot=p1,width = 7,height = 5,units = "cm",device = "png",dpi=1200)
   # print run condition
   cat("\n")
   cat(cyan("‘Elbow-plot DO!!!!!"))
   cat("\n")
 }
+#-----------------------------------####---------------------------------------#
 # function15:test cell cluster resolution
-test_cell_cluster_resolution <- function(data,name){
+test_cell_cluster_resolution <- function(data,project_name){
   # data <- subset_maritx
   # name <- "subset"
   test <- FindClusters(data, resolution = seq(0.2, 2, 0.2))
   clus.tree.out <- clustree(test)
   print(clus.tree.out)
   # save plot
-  ggsave(file.path(resolution_dir,paste0(name," clustree.pdf")),device = "pdf",width = 25,height = 30,units = "cm",plot = clus.tree.out)
-  ggsave(file.path(resolution_dir,paste0(name," clustree.png")),device = "png",width = 25,height = 30,units = "cm",plot = clus.tree.out,dpi=1000)
+  ggsave(file.path(cluster_dir,paste0("figure-1 ",project_name," clustree.pdf")),device = "pdf",width = 25,height = 30,units = "cm",plot = clus.tree.out)
+  ggsave(file.path(cluster_dir,paste0("figure-1 ",project_name," clustree.png")),device = "png",width = 25,height = 30,units = "cm",plot = clus.tree.out,dpi=1000)
 }
 # function16:draw umap plot
 draw_umap_plot <- function(data,name){
