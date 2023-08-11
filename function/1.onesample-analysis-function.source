@@ -229,7 +229,7 @@ draew_all_PCA_HEATMAP <- function(data){
   # draw plot
   for (i in c(1:PCA_NUMBER)){
     # set save format & file parameter
-    png(file.path(qc_dir,paste0("figure 5 ","PCA","-",i,".png")),width = 2000, height = 2000, units = "px",pointsize = 12,res=300)
+    png(file.path(PCA_HEATMAP_dir,paste0("figure 5 ","PCA","-",i,".png")),width = 2000, height = 2000, units = "px",pointsize = 12,res=300)
     # draw plot
     DimHeatmap(data, dims = i, cells = 500, balanced = TRUE)
     # close draw
@@ -332,7 +332,7 @@ visablity_Elbow_plot <- function(data,project_name,PCs_cutoff){
   p <- ElbowPlot(data,ndims = PCs_cutoff)
   p1 <- p + 
     scale_y_continuous(n.breaks = 10) +
-    scale_x_continuous(n.breaks = 20) +
+    scale_x_continuous(n.breaks = PCs_cutoff) +
     theme(plot.title = element_text(hjust = 0.5,size = 8),
           legend.position="bottom",
           legend.title=element_text(size = 8,face = "normal",family="Times"), 
@@ -345,8 +345,8 @@ visablity_Elbow_plot <- function(data,project_name,PCs_cutoff){
           axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))
   print(p1)
   # ggsave
-  ggsave(file.path(qc_dir,paste0("figure-9 ",project_name," Elbow-plot.pdf")),plot=p1,width = 7,height = 5,units = "cm",device = "pdf")
-  ggsave(file.path(qc_dir,paste0("figure-9 ",project_name," Elbow-plot.png")),plot=p1,width = 7,height = 5,units = "cm",device = "png",dpi=1200)
+  ggsave(file.path(qc_dir,paste0("figure-9 ",project_name," Elbow-plot.pdf")),plot=p1,width = 13,height = 5,units = "cm",device = "pdf")
+  ggsave(file.path(qc_dir,paste0("figure-9 ",project_name," Elbow-plot.png")),plot=p1,width = 13,height = 5,units = "cm",device = "png",dpi=1200)
   # print run condition
   cat("\n")
   cat(cyan("‘Elbow-plot DO!!!!!"))
@@ -454,7 +454,7 @@ find_everyone_cell_cluster_marker <- function(data){
     # findmarkers gene
     temp.markers <- FindMarkers(data, ident.1 = (i-1), min.pct = 0.25)
     # save cluster marker gene
-    write.csv(temp.markers,file.path(cluster_dir,paste0("cluster ",i-1," marker gene list.csv")))
+    write.csv(temp.markers,file.path(cluster_marker_gene_dir,paste0("cluster ",i-1," marker gene list.csv")))
     print_color_note_UP(paste0(" Cluster ",i-1," marker gene ⬇️!!"))
     print(head(temp.markers))
     print_color_note_DOWN(paste0(" Cluster ",i-1," marker gene ⬆️!!"))
@@ -892,7 +892,6 @@ states_cell_cluster_rate <- function(data,group_name,name){
   ggsave(file.path(proportions_dir,paste0(name," proportion_annotation-plot.pdf")),plot=p,width = width,height = 8,units = "cm",device = "pdf")
   ggsave(file.path(proportions_dir,paste0(name," proportion_annotation-plot.png")),plot=p,width = width,height = 8,units = "cm",device = "png",dpi=1000)
   # print run condition
-  
 }
 # function29: states cell cluster rate
 DoHeatmap_plot_subset <- function(markers,data,top_num,name){
