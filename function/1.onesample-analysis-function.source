@@ -524,7 +524,7 @@ SingleR_cell_type_annotation <- function(data,name,ref_data){
   annotation_data <- data.frame(cluster_ID=paste0("Cluster ",rownames(pred)),
                                 cell_cluster_type=pred$labels)
   # save annotation result
-  write.csv(annotation_data,file.path(annotation_dir,paste0(name," auto annotation reslut.csv")))
+  write.csv(annotation_data,file.path(annotation_figure_dir,paste0(name," auto annotation reslut.csv")))
   # print run condition
   print_color_note_UP("Cell annotation result ⬇️!!!!")
   # print annotation data
