@@ -1,6 +1,6 @@
 # author:zhang jian
 # date:2023.8.11
-# version:1.1.1v
+# version:2.1.1v
 # description: this is R function merge doc for scRNA-seq
 ################################################################################
 # set pint witdth dafult:100
@@ -570,6 +570,7 @@ draw_umap_annotation_plot <- function(data,name){
   cat(cyan(paste0("PCA annotation ",name," PLOT (UMAP) DONE!!!!!","\n")))
   cat("\n")
 }
+# function24-1: AUTO ANNOTATION by SinglR
 auto_everyone_dataset <- function(data){
   #HPCA
   # set annotation parameter
@@ -605,6 +606,52 @@ auto_everyone_dataset <- function(data){
   names(new.cluster.ids) <- levels(test)
   test  <- RenameIdents(test , new.cluster.ids)
   draw_umap_annotation_plot(test,name)
+}
+# function24-1: AUTO ANNOTATION by scTYPE
+scTYPE_annotation <- function(ScTypeDB,data){
+  list <- c("Immune system","Pancreas","Liver","Eye","Kidney","Brain","Lung","Adrenal","Heart","Intestine","Muscle","Placenta","Spleen","Stomach","Thymus")
+  for (i in list){
+    # i <- list[1]
+    print_color_note_UP(paste0("auto annotation cell type by scTYPR for ",i," database DONE!!!"))
+    tissue = i # e.g. Immune system,Pancreas,Liver,Eye,Kidney,Brain,Lung,Adrenal,Heart,Intestine,Muscle,Placenta,Spleen,Stomach,Thymus 
+    # prepare gene sets
+    gs_list = gene_sets_prepare(ScTypeDB, tissue)
+    # get cell-type by cell matrix
+    es.max = sctype_score(scRNAseqData = data[["RNA"]]@scale.data, scaled = TRUE, 
+                          gs = gs_list$gs_positive, gs2 = gs_list$gs_negative)
+    # merge by cluster
+    cL_resutls = do.call("rbind", lapply(unique(data@meta.data$seurat_clusters), function(cl){
+      es.max.cl = sort(rowSums(es.max[ ,rownames(data@meta.data[data@meta.data$seurat_clusters==cl, ])]), decreasing = !0)
+      head(data.frame(cluster = cl, type = names(es.max.cl), scores = es.max.cl, ncells = sum(data@meta.data$seurat_clusters==cl)), 10)
+    }))
+    # get sctype cell cluster type
+    sctype_scores = cL_resutls %>% group_by(cluster) %>% top_n(n = 1, wt = scores)
+    # set low-confident (low ScType score) clusters to "unknown"
+    sctype_scores$type[as.numeric(as.character(sctype_scores$scores)) < sctype_scores$ncells/4] = "Unknown"
+    # print(sctype_scores[,1:3])
+    # create dir 
+    temp_dir <- file.path(annotation_scTYPE_dir,i)
+    create_dir(c(temp_dir))
+    # save cell cluster annotation data
+    write.csv(sctype_scores,file.path(temp_dir,paste0(i,"annotation_by_scTYPE.csv")))
+    # add annotation infor for seaurt data
+    data@meta.data$customclassif = ""
+    for(j in unique(sctype_scores$cluster)){
+      cl_type = sctype_scores[sctype_scores$cluster==j,]; 
+      data@meta.data$customclassif[data@meta.data$seurat_clusters == j] = as.character(cl_type$type[1])
+    }
+    # draw plot for umap
+    umap_p <- DimPlot(data, reduction = "umap", label = TRUE, repel = TRUE, group.by = 'customclassif')
+    # save umap plot
+    ggsave(file.path(temp_dir,paste0(i," umap annotation_by_scTYPE.pdf")),plot=umap_p,device = "pdf",width = 10,height = 7)
+    ggsave(file.path(temp_dir,paste0(i," umap annotation_by_scTYPE.png")),plot=umap_p,device = "png",width = 10,height = 7,dpi=1000)
+    # draw plot for umap
+    tsne_p <- DimPlot(data, reduction = "tsne", label = TRUE, repel = TRUE, group.by = 'customclassif')
+    # save umap plot
+    ggsave(file.path(temp_dir,paste0(i," tsne annotation_by_scTYPE.pdf")),plot=tsne_p,device = "pdf",width = 10,height = 7)
+    ggsave(file.path(temp_dir,paste0(i," tsne annotation_by_scTYPE.png")),plot=tsne_p,device = "png",width = 10,height = 7,dpi=1000)
+    print_color_note_DOWN(paste0("auto annotation cell type by scTYPR for ",i," database DO!!"))
+  }
 }
 # function25: MANUAL ANNOTATION EVERYONE DATA set
 manual_annotation_figure <- function(data,genes_to_check){
