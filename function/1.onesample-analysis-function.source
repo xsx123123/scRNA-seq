@@ -570,12 +570,11 @@ draw_umap_annotation_plot <- function(data,name){
   cat(cyan(paste0("PCA annotation ",name," PLOT (UMAP) DONE!!!!!","\n")))
   cat("\n")
 }
-# function24: AUTO ANNOTATION EVERYONE DATA set
 auto_everyone_dataset <- function(data){
-  #Blueprint-ENCODE
+  #HPCA
   # set annotation parameter
-  ref <- refer_data_set_1
-  name <- "Blueprint-ENCODE"
+  ref <- hpca.se.local
+  name <- "HPCA"
   # use SingleR annotation cell stype
   auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
   # draw Annotation diagnostics
@@ -589,78 +588,10 @@ auto_everyone_dataset <- function(data){
   names(new.cluster.ids) <- levels(test)
   test  <- RenameIdents(test , new.cluster.ids)
   draw_umap_annotation_plot(test,name)
-  ############Mouse bulk rna-seq############
+  ############ HEMA ############
   # set annotation parameter
-  ref <- refer_data_set_2
-  name <- "Mouse bulk rna-seq"
-  # use SingleR annotation cell stype
-  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
-  # draw Annotation diagnostics
-  p <- plotScoreHeatmap(auto_annotation_rersult)
-  # ggsave
-  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
-  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
-  # draw annotation plot
-  test <- data
-  new.cluster.ids <- auto_annotation_rersult$pruned.labels
-  names(new.cluster.ids) <- levels(test)
-  test  <- RenameIdents(test , new.cluster.ids)
-  draw_umap_annotation_plot(test,name)
-  ############Mouse Immunological############
-  # set annotation parameter
-  ref <- refer_data_set_3
-  name <- "Mouse Immunological"
-  # use SingleR annotation cell stype
-  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
-  # draw Annotation diagnostics
-  p <- plotScoreHeatmap(auto_annotation_rersult)
-  # ggsave
-  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
-  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
-  # draw annotation plot
-  test <- data
-  new.cluster.ids <- auto_annotation_rersult$pruned.labels
-  names(new.cluster.ids) <- levels(test)
-  test  <- RenameIdents(test , new.cluster.ids)
-  draw_umap_annotation_plot(test,name)
-  ############Immune Cell Expression############
-  # set annotation parameter
-  ref <- refer_data_set_4
-  name <- "Immune Cell Expression"
-  # use SingleR annotation cell stype
-  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
-  # draw Annotation diagnostics
-  p <- plotScoreHeatmap(auto_annotation_rersult)
-  # ggsave
-  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
-  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
-  # draw annotation plot
-  test <- data
-  new.cluster.ids <- auto_annotation_rersult$pruned.labels
-  names(new.cluster.ids) <- levels(test)
-  test  <- RenameIdents(test , new.cluster.ids)
-  draw_umap_annotation_plot(test,name)
-  ############Novershtern hematopoietic############
-  # set annotation parameter
-  ref <- refer_data_set_5
-  name <- "Novershtern hematopoietic"
-  # use SingleR annotation cell stype
-  auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
-  # draw Annotation diagnostics
-  p <- plotScoreHeatmap(auto_annotation_rersult)
-  # ggsave
-  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.pdf")),plot=p,width = 15,height = 16,units = "cm",device = "pdf")
-  ggsave(file.path(annotation_figure_dir,paste0(name," Annotation diagnostics.png")),plot=p,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
-  # draw annotation plot
-  test <- data
-  new.cluster.ids <- auto_annotation_rersult$pruned.labels
-  names(new.cluster.ids) <- levels(test)
-  test  <- RenameIdents(test , new.cluster.ids)
-  draw_umap_annotation_plot(test,name)
-  ############Monaco immune data############
-  # set annotation parameter
-  ref <- refer_data_set_6
-  name <- "Monaco immune data"
+  ref <- hema.se.local
+  name <- "HEMA"
   # use SingleR annotation cell stype
   auto_annotation_rersult <- SingleR_cell_type_annotation(data,name,ref)
   # draw Annotation diagnostics
