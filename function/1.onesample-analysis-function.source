@@ -725,6 +725,8 @@ manual_annotation_figure <- function(data,genes_to_check){
   # save plot
   ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.pdf")),device = "pdf",width = 10,height = 12,plot=all_p)
   ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.png")),device = "png",width = 10,height = 12,plot=all_p,dpi=600)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," DIM_plot.pdf")),device = "pdf",width = 10,height = 12,plot=p1)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," DIM_plot.png")),device = "png",width = 10,height = 12,plot=p1,dpi=600)
   # print run condition
   cat("\n")
   cat(cyan(paste0("manual annotation ",genes_to_check," PLOT  DONE!!!!!")))
