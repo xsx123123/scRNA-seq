@@ -370,7 +370,7 @@ draw_umap_plot <- function(data,name){
   cat("\n")
   cat(cyan("PCA dim PLOT (UMAP) DO!!!!!"))
   cat("\n")
-  p <- DimPlot(data, reduction = "umap",label=T) 
+  p <- DimPlot(data, reduction = "umap",label=T,label.size=8) 
   p1 <- p +
     geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
     geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
@@ -408,7 +408,7 @@ draw_tsne_plot <- function(data,name){
   cat("\n")
   cat(cyan("PCA dim PLOT (tSNE) DO!!!!!"))
   cat("\n")
-  p <- DimPlot(data, reduction = "tsne",label=T) 
+  p <- DimPlot(data, reduction = "tsne",label=T,label.size=8) 
   p1 <- p +
     geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
     geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
