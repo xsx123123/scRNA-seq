@@ -962,6 +962,8 @@ subset_manual_annotation_figure <- function(data,genes_to_check){
   # save plot
   ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.pdf")),device = "pdf",width = 10,height = 12,plot=all_p)
   ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.png")),device = "png",width = 10,height = 12,plot=all_p,dpi=600)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," dot_plot.pdf")),device = "pdf",width = 5,height = 5,plot=p1)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," odt_plot.png")),device = "png",width = 5,height = 5,plot=p1,dpi=600)
   # print run condition
   cat("\n")
   cat(cyan(paste0("subset manual annotation ",genes_to_check," PLOT  DONE!!!!!")))
