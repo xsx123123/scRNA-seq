@@ -763,7 +763,7 @@ draw_volcano <- function(deg,i){
   ggsave(file.path(deg_figure_dir,paste0(i," Volcano Plot.pdf")),plot = p,width = 7,height = 5,units = "cm")
   ggsave(file.path(deg_figure_dir,paste0(i," Volcano Plot.png")),device = "png",plot = p,width = 7,height = 5,units = "cm",dpi = 1000)
 }
-  # function24: DRAW volcano PLOT
+# function24: DRAW volcano PLOT
 draw_volcano_type2 <- function(deg,i){
   # draw plot
   deg_result <- deg
