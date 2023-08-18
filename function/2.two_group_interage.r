@@ -763,6 +763,95 @@ draw_volcano <- function(deg,i){
   ggsave(file.path(deg_figure_dir,paste0(i," Volcano Plot.pdf")),plot = p,width = 7,height = 5,units = "cm")
   ggsave(file.path(deg_figure_dir,paste0(i," Volcano Plot.png")),device = "png",plot = p,width = 7,height = 5,units = "cm",dpi = 1000)
 }
+  # function24: DRAW volcano PLOT
+draw_volcano_type2 <- function(deg,i){
+  # draw plot
+  deg_result <- deg
+  deg_result$log10 <- -log10(deg_result$p_val)
+  # ADD UP&DOWN&NO GENE TAG
+  deg_result$label = NA
+  deg_result$Group <- "Non-significan"
+  deg_result$Group[which((deg_result$p_val < 0.05) & (deg_result$avg_log2FC > 0.5))] = "Up-regulated"
+  deg_result$Group[which((deg_result$p_val  < 0.05) & (deg_result$avg_log2FC < -0.5))] = "Down-regulated"
+  # SORT BY p_val VALUE
+  deg_result <- deg_result[order(deg_result$p_val),]
+  # GET NOT&UP&DOWN DATA
+  non_deg_result <- subset(deg_result,deg_result$Group =="Non-significan")
+  up_deg_result <- subset(deg_result,deg_result$Group =="Up-regulated")
+  down_deg_result <- subset(deg_result,deg_result$Group =="Down-regulated")
+  # GET TOP 15 p_val GENE UP&DOWN
+  deg_result_up <- head(subset(deg_result,deg_result$Group == "Up-regulated"),15)
+  deg_result_down <- head(subset(deg_result,deg_result$Group == "Down-regulated"),15)
+  # get y_aes
+  y_aes <- deg_result$log10
+  # get y_aes
+  y_aes <- deg_result$log10
+  # remove inf
+  y_aes <- y_aes[is.finite(y_aes)]
+  y_1 <- sort(y_aes, decreasing = TRUE)[1]
+  y_2 <- sort(y_aes, decreasing = TRUE)[2]
+  if ( max(y_aes) > 300){
+    y_aes_value <- 250
+  }else{
+    if(y_1/y_2 > 1.4){
+      y_aes_value <- (y_1+y_2)/2
+    }else{
+      y_aes_value <- max(y_aes)*1.05
+    }
+  }
+  # x_aes deal
+  x_aes <- deg_result$avg_log2FC
+  # remove NA
+  x_aes <- na.omit(x_aes)
+  if (max(x_aes) > 7.5){
+    x_aes <- 7.5
+  }else{
+    x_aes <- max(x_aes)
+  }
+  # draw volcano plot
+  p <- ggplot(deg_result, aes(x = avg_log2FC, y = log10)) + 
+    geom_point(data=non_deg_result,aes(x = avg_log2FC, y = log10),size=0.02,shape = 21,color="#C7C7C7",alpha=0.25) +
+    geom_point(data=deg_result_up,aes(x = avg_log2FC, y = log10),size=0.02,shape = 21,fill="#e41749",alpha=0.5) +
+    geom_point(data=up_deg_result,aes(x = avg_log2FC, y = log10),size=0.02,shape = 21,color="#e41749",alpha=0.4) +
+    geom_point(data=deg_result_down,aes(x = avg_log2FC, y = log10),size=0.02,shape = 21,fill="#41b6e6",alpha=0.5) +
+    geom_point(data=down_deg_result,aes(x = avg_log2FC, y = log10),size=0.02,shape = 21,color="#41b6e6",alpha=0.4) +
+    geom_vline(xintercept=0.5,lty=2,col="black",lwd=0.1) + 
+    geom_vline(xintercept=-0.5,lty=2,col="black",lwd=0.1) + 
+    geom_hline(yintercept = 1.3,lty=2,col="black",lwd=0.1) +  
+    labs(x= bquote("RNA-seq " * log[2] * " fold change " * .(EXP_NAEE) * ""),y= expression(paste(-log[10], "P-value")),title =paste0(i," Volcano Plot")) + 
+    geom_text_repel(data = deg_result_up,aes(avg_log2FC, log10, label= gene),size=1,colour="black",fontface="bold.italic",
+                    segment.alpha = 0.5,segment.size = 0.15,segment.color = "black",min.segment.length=0,
+                    box.padding=unit(0.2, "lines"),point.padding=unit(0, "lines"),force = 20,max.iter = 3e3,
+                    xlim=c(0, 6),max.overlaps = 25,arrow=arrow(length = unit(0.02, "inches"))) + 
+    geom_text_repel(data = deg_result_down,aes(avg_log2FC, log10, label= gene),size=1,colour="black",fontface="bold.italic",
+                    segment.alpha =0.5,segment.size = 0.15,segment.color = "black",min.segment.length=0,
+                    box.padding=unit(0.2, "lines"),point.padding=unit(0, "lines"),force = 20,max.iter = 3e3,
+                    xlim=c(-6, 0),max.overlaps = 25,arrow=arrow(length = unit(0.02, "inches"))) + 
+    annotate("text", x=-(x_aes*0.8), y=y_aes_value*0.9,size = 1.5,colour="#41b6e6", label= paste0("Down in ",EXP_NAEE))+
+    geom_segment(aes(x = -(x_aes*0.5), y = y_aes_value*0.85, xend = -(x_aes*1.05), yend = y_aes_value*0.85),arrow = arrow(length = unit(0.15, "cm")),colour="#41b6e6",linewidth=0.4,
+                 alpha=0.15,lineend="round",linejoin="round") +
+    annotate("text", x=x_aes*0.8, y=y_aes_value*0.9, size = 1.5,colour="#e41749",label= paste0("UP in ",EXP_NAEE) )+
+    geom_segment(aes(x = (x_aes*0.5), y = y_aes_value*0.85, xend = (x_aes*1.05), yend = y_aes_value*0.85),arrow = arrow(length = unit(0.15, "cm")),colour="#e41749",linewidth=0.4,
+                 alpha=0.15,lineend="round",linejoin="round") +
+    guides(color=guide_legend(override.aes = list(size=10)),) + 
+    scale_x_continuous(limits=c(-(x_aes*1.2),(x_aes*1.2)),n.breaks = 8) +
+    scale_y_continuous(limits=c(0,y_aes_value),n.breaks = 10) +
+    theme_classic()+
+    theme(plot.title = element_text(hjust = 0.5,size =5,family="sans",face = "bold"),legend.position="none",
+          legend.title=element_text(size =4,face = "bold",family="sans"), 
+          text = element_text(size = 4,family="sans"),title = element_text(size = 4),           
+          axis.title.x = element_text(size = 4,family="sans",face = "bold"),axis.title.y = element_text(size = 4,family="sans",face = "bold"),    
+          axis.text.x = element_text(size = 4,family="sans"),axis.text.y = element_text(size = 4,family="sans"),
+          panel.border = element_rect(color = "#606c70", fill = NA, size = 0.3),
+          axis.line.x=element_line(linetype=1,color="#606c70",size=0.12),       
+          axis.line.y=element_line(linetype=1,color="#606c70",size=0.12),
+          axis.ticks.x=element_line(color="#606c70",size=0.12,lineend = 0.05),
+          axis.ticks.length=unit(.08,"lines"),
+          axis.ticks.y=element_line(color="#606c70",size=0.12,lineend = 0.05))
+  # save plot
+  ggsave(file.path(deg_figure_dir,paste0(i," Volcano Plot-type2.pdf")),plot = p,width = 7,height = 5,units = "cm")
+  ggsave(file.path(deg_figure_dir,paste0(i," Volcano Plot-type2.png")),device = "png",plot = p,width = 7,height = 5,units = "cm",dpi = 1000)
+}
 # function25: draw activate  volcano plot
 draw_volcano_activate <- function(deg,i){
   # draw plot
@@ -839,6 +928,7 @@ DEG_single_cell_cluster <- function(i){
   deg <- data.frame(gene = rownames(deg), deg)
   # draw volcano
   draw_volcano(deg,i)
+  draw_volcano_type2(deg,i)
   draw_volcano_activate(deg,i)
   # set save dir name
   save_path <- file.path(deg_dir,i)
