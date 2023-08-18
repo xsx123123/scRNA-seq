@@ -2,6 +2,8 @@
 # date:2023.8.17
 # version:1.0v
 # function1:create dir
+# PATH-2 loading function
+# function1:create dir
 create_dir <- function(list_dir){
   for (i in list_dir) {
     if(! dir.exists(i)){
@@ -727,7 +729,7 @@ draw_volcano <- function(deg,i){
     geom_point(data=down_deg_result,aes(x = avg_log2FC, y = log10),size=0.02,shape = 21,color="#41b6e6",alpha=0.4) +
     geom_vline(xintercept=0,lty=2,col="black",lwd=0.1) +  
     geom_hline(yintercept = 1.3,lty=2,col="black",lwd=0.1) +  
-    labs(x= bquote("RNA-seq " * log[2] * " fold change " * .(EXP_NAEE) * ":WT"),y= expression(paste(-log[10], "P-value")),title =paste0(i," Volcano Plot")) + 
+    labs(x= bquote("RNA-seq " * log[2] * " fold change " * .(EXP_NAEE) * ""),y= expression(paste(-log[10], "P-value")),title =paste0(i," Volcano Plot")) + 
     geom_text_repel(data = deg_result_up,aes(avg_log2FC, log10, label= gene),size=1,colour="black",fontface="bold.italic",
                     segment.alpha = 0.5,segment.size = 0.15,segment.color = "black",min.segment.length=0,
                     box.padding=unit(0.2, "lines"),point.padding=unit(0, "lines"),force = 20,max.iter = 3e3,
@@ -855,7 +857,7 @@ multithreading_DEG <- function(){
   if (threads == T){
     cell_cluster_list <- levels(rename_maritx@active.ident)
     # use threads number
-    num_cores = detectCores() - 4
+    num_cores = detectCores() - 20
     # print run condition
     print_color_note_UP("Use multithreading for DEG DO!!!!!")
     print_color_note_middle(paste0("Use ",num_cores," Core!!!!"))
