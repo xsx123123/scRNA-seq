@@ -20,9 +20,10 @@ id_convert <- function(gene_list){
 }
 # Function3: Kegg function
 kegg_gene_list <- function(change_gene.kegg_id){
+  # change_gene.kegg_id <- kegg_id$kegg 
   change_gene.KEGG <- enrichKEGG(gene = change_gene.kegg_id,
                                  keyType = "kegg",
-                                 organism = KEGG_database,
+                                 organism = "hsa",
                                  pvalueCutoff = KEGG_PVALUE,
                                  pAdjustMethod = "BH")
   return(change_gene.KEGG)
@@ -90,14 +91,14 @@ kegg <- function(change_gene.KEGG,name,save_folder){
 # Function6: KEGG analysis
 KEGG <- function(gene_list,save_folder,name){
   # test parameter
-  # gene_list <- pvalue_DOWN_gene_list
+  # gene_list <- pvalue_up_gene_list
   # name <- "pvalue_down_kegg"
   # save_folder <- save_folder_KEGG_DOWN
   # KEGG analysis
   kegg_id <- id_convert(gene_list)
   kegg_result <- kegg_gene_list(kegg_id$kegg)
   # if KEGG  result == NULL
-  if(dim(kegg_result)[1]==0){
+  if(is.null(kegg_result)){
     cat("\n")
     cat(bgRed("WARRING!!!!!","\n"))
     cat(bgRed("Enrichment KEGG don't enrichment eveyone pathway","\n"))
@@ -379,9 +380,11 @@ draw_all_GO_figure <- function(data,name_analysis_type,save_name,save_dir_GO){
 # Function15: deal longest GO Description
 deal_longest_GO_Description <- function(data){
   for (i in c(1:length(data))){
+    # data <- gene.go.BP_data$Description
+    # i <- 373
     speace_number <- str_count(data[i], pattern = " ")
-    if(speace_number > 4){
-      str_split <- strsplit(data[i]," ")[[1]][3]
+    if (speace_number > 5){
+      str_split <- strsplit(data[i]," ")[[1]][round(speace_number/2)]
       str_1 <- strsplit(data[i],str_split)[[1]][1]
       str_2 <- strsplit(data[i],str_split)[[1]][2]
       merge_str <- paste0(str_1,"\n",str_2)
@@ -444,21 +447,20 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     cat(bgRed("WARRING!!!!!"))
     cat(bgRed("Enrichment BP don't enrichment eveyone pathway"))
     cat("\n")
-    save_BP_result <- as.data.frame(setReadable(gene.go.BP, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
+    gene.go.BP <- as.data.frame(setReadable(gene.go.BP, OrgDb = org.Hs.eg.db, keyType="SYMBOL"))
   }else{
-    #
-    enrichmentNetwork(gene.go.BP@result)
     # ID convert for BP
-    save_BP_result <- as.data.frame(setReadable(gene.go.BP, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
-    write.csv(save_BP_result,file = file.path(save_dir_GO,paste0(save_name,"_GO_BP_enrichment_result.csv")))
+    gene.go.BP_data <- as.data.frame(gene.go.BP)
+    # gene.go.BP <- as.data.frame(setReadable(gene.go.BP, OrgDb = org.Hs.eg.db, keyType="SYMBOL"))
+    write.csv(gene.go.BP_data,file = file.path(save_dir_GO,paste0(save_name,"_GO_BP_enrichment_result.csv")))
     # deal longest GO Description
-    save_BP_result$Description <- deal_longest_GO_Description(save_BP_result$Description)
-    draw_GO_figure(save_BP_result,"BP",save_name,save_dir_GO)
+    gene.go.BP_data$Description <- deal_longest_GO_Description(gene.go.BP_data$Description)
+    draw_GO_figure(gene.go.BP_data,"BP",save_name,save_dir_GO)
     # create dir
     save_data_dir_BP <- file.path(save_dir_GO,"top30_BP")
     create_dir(save_data_dir_BP)
     # save GO data for BP
-    save_everyone_go_data(save_BP_result,"BP",save_data_dir_BP)
+    save_everyone_go_data(gene.go.BP_data,"BP",save_data_dir_BP)
     # draw GO dag plot
     draw_other_plot_of_GO(gene.go.BP,"BP",save_dir_GO)
   }
@@ -474,19 +476,20 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     cat(bgRed("WARRING!!!!!","\n"))
     cat(bgRed("Enrichment CC don't enrichment eveyone pathway","\n"))
     cat("\n")
-    save_CC_result <- as.data.frame(setReadable(gene.go.CC, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
+    gene.go.CC <- as.data.frame(setReadable(gene.go.CC, OrgDb = org.Hs.eg.db, keyType="SYMBOL"))
   }else{
     # ID convert for CC
-    save_CC_result <- as.data.frame(setReadable(gene.go.CC, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
-    write.csv(save_CC_result,file = file.path(save_dir_GO,paste0(save_name,"_GO_CC_enrichment_result.csv")))
+    gene.go.CC_data <- as.data.frame(gene.go.CC)
+    # gene.go.CC <- as.data.frame(setReadable(gene.go.CC, OrgDb = org.Hs.eg.db, keyType="SYMBOL"))
+    write.csv(gene.go.CC_data,file = file.path(save_dir_GO,paste0(save_name,"_GO_CC_enrichment_result.csv")))
     # deal longest GO Description
-    save_CC_result$Description <- deal_longest_GO_Description(save_CC_result$Description)
-    draw_GO_figure(save_CC_result,"CC",save_name,save_dir_GO)
+    gene.go.CC_data$Description <- deal_longest_GO_Description(gene.go.CC_data$Description)
+    draw_GO_figure(gene.go.CC_data,"CC",save_name,save_dir_GO)
     # create dir
     save_data_dir_CC <- file.path(save_dir_GO,"top30_CC")
     create_dir(save_data_dir_CC)
     # save GO data for CC
-    save_everyone_go_data(save_CC_result,"CC",save_data_dir_CC)
+    save_everyone_go_data(gene.go.CC_data,"CC",save_data_dir_CC)
     # draw GO dag plot
     draw_other_plot_of_GO(gene.go.CC,"CC",save_dir_GO)
   }
@@ -502,42 +505,43 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     cat(bgRed("WARRING!!!!!","\n"))
     cat(bgRed("Enrichment MF don't enrichment eveyone pathway","\n"))
     cat("\n")
-    save_MF_result <- as.data.frame(setReadable(gene.go.MF, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
+    gene.go.MF <- as.data.frame(setReadable(gene.go.MF, OrgDb = org.Hs.eg.db, keyType="SYMBOL"))
   }else{
     # ID convert for MF
-    save_MF_result <- as.data.frame(setReadable(gene.go.MF, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
-    write.csv(save_MF_result,file = file.path(save_dir_GO,paste0(save_name,"_GO_MF_enrichment_result.csv")))
+    gene.go.MF_data <- as.data.frame(gene.go.MF)
+    # gene.go.MF <- as.data.frame(setReadable(gene.go.MF, OrgDb = org.Hs.eg.db, keyType="SYMBOL"))
+    write.csv(gene.go.MF_data,file = file.path(save_dir_GO,paste0(save_name,"_GO_MF_enrichment_result.csv")))
     # create dir
     save_data_dir_MF <- file.path(save_dir_GO,"top30_MF")
     create_dir(save_data_dir_MF)
     # save GO data for MF
-    save_everyone_go_data(save_MF_result,"MF",save_data_dir_MF)
+    save_everyone_go_data(gene.go.MF_data,"MF",save_data_dir_MF)
     # draw GO dag plot
     draw_other_plot_of_GO(gene.go.MF,"MF",save_dir_GO)
     # deal longest GO Description
-    save_MF_result$Description <- deal_longest_GO_Description(save_MF_result$Description)
-    draw_GO_figure(save_MF_result,"MF",save_name,save_dir_GO)
+    gene.go.MF_data$Description <- deal_longest_GO_Description(gene.go.MF_data$Description)
+    draw_GO_figure(gene.go.MF_data,"MF",save_name,save_dir_GO)
   }
   print_color_note("GO analysis of MF (Molecular Function) DONE!!!!!!")
   ##############################################
   print_color_note("GO analysis of draw all GO result figure DO!!!!!!")
   # sort and save top10 GO:BP
-  save_BP_result[order(save_BP_result$qvalue),]
-  save_BP_result_top10 <- save_BP_result[c(1:10),]
-  save_BP_result_top10$type <- 1
-  save_BP_result_top10$type_name <- "BP"
+  gene.go.BP[order(gene.go.BP$qvalue),]
+  gene.go.BP_top10 <- gene.go.BP[c(1:10),]
+  gene.go.BP_top10$type <- 1
+  gene.go.BP_top10$type_name <- "BP"
   # sort and save top10 GO:CC
-  save_CC_result[order(save_CC_result$qvalue),]
-  save_CC_result_top10 <- save_CC_result[c(1:10),]
-  save_CC_result_top10$type <- 3
-  save_CC_result_top10$type_name <- "CC"
+  gene.go.CC[order(gene.go.CC$qvalue),]
+  gene.go.CC_top10 <- gene.go.CC[c(1:10),]
+  gene.go.CC_top10$type <- 3
+  gene.go.CC_top10$type_name <- "CC"
   # sort and save top10 GO:MF
-  save_MF_result[order(save_MF_result$qvalue),]
-  save_MF_result_top10 <- save_MF_result[c(1:10),]
-  save_MF_result_top10$type <- 2
-  save_MF_result_top10$type_name <- "MF"
+  gene.go.MF[order(gene.go.MF$qvalue),]
+  gene.go.MF_top10 <- gene.go.MF[c(1:10),]
+  gene.go.MF_top10$type <- 2
+  gene.go.MF_top10$type_name <- "MF"
   # get all data
-  all_data <- rbind(save_BP_result_top10,save_CC_result_top10,save_MF_result_top10)
+  all_data <- rbind(gene.go.BP_top10,gene.go.CC_top10,gene.go.MF_top10)
   # remove NA
   all_data <- na.omit(all_data)
   # if all_data==NA
