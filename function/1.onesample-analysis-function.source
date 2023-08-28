@@ -1,6 +1,6 @@
-# author:zhang jian
-# date:2023.8.11
-# version:2.1.2v
+draw_tsne_plot# author:zhang jian
+# date:2023.8.18
+# version:2.2.2v
 # description: this is R function merge doc for scRNA-seq
 ################################################################################
 # set pint witdth dafult:100
@@ -370,7 +370,7 @@ draw_umap_plot <- function(data,name){
   cat("\n")
   cat(cyan("PCA dim PLOT (UMAP) DO!!!!!"))
   cat("\n")
-  p <- DimPlot(data, reduction = "umap",label=T,label.size=8) 
+  p <- DimPlot(data, reduction = "umap",label=T,label.size=4) 
   p1 <- p +
     geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
     geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
@@ -408,7 +408,7 @@ draw_tsne_plot <- function(data,name){
   cat("\n")
   cat(cyan("PCA dim PLOT (tSNE) DO!!!!!"))
   cat("\n")
-  p <- DimPlot(data, reduction = "tsne",label=T,label.size=8) 
+  p <- DimPlot(data, reduction = "tsne",label=T,label.size=4) 
   p1 <- p +
     geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
     geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
@@ -432,8 +432,8 @@ draw_tsne_plot <- function(data,name){
           axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
     guides(color=guide_legend(nrow=2,title="Cluster-ID",title.position = "left",override.aes = list(size=2.5,alpha=0.8)))
   # ggsave
-  ggsave(file.path(tsne_dir,paste0(name,"tSNE-plot.pdf")),plot=p1,width = 15,height = 16,units = "cm",device = "pdf")
-  ggsave(file.path(tsne_dir,paste0(name,"tSNE-plot.png")),plot=p1,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
+  ggsave(file.path(tsne_dir,paste0(name," tSNE-plot.pdf")),plot=p1,width = 15,height = 16,units = "cm",device = "pdf")
+  ggsave(file.path(tsne_dir,paste0(name," tSNE-plot.png")),plot=p1,width = 15,height = 16,units = "cm",device = "png",dpi=1000)
   # print run condition
   cat("\n")
   cat(cyan("PCA dim PLOT (tSNE) DONE!!!!!"))
@@ -723,10 +723,10 @@ manual_annotation_figure <- function(data,genes_to_check){
   # print plot
   print(all_p)
   # save plot
-  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.pdf")),device = "pdf",width = 10,height = 12,plot=all_p)
-  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.png")),device = "png",width = 10,height = 12,plot=all_p,dpi=600)
-  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," DIM_plot.pdf")),device = "pdf",width = 10,height = 12,plot=p3)
-  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," DIM_plot.png")),device = "png",width = 10,height = 12,plot=p3,dpi=600)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.pdf")),device = "pdf",width=14,height = 12,plot=all_p)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," merge_plot.png")),device = "png",width=14 ,height = 12,plot=all_p,dpi=600)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," DIM_plot.pdf")),device = "pdf",width = 5,height = 5.2,plot=p3)
+  ggsave(file.path(manual_annotation_figure_dir,paste0(genes_to_check," DIM_plot.png")),device = "png",width = 5,height = 5.2,plot=p3,dpi=600)
   # print run condition
   cat("\n")
   cat(cyan(paste0("manual annotation ",genes_to_check," PLOT  DONE!!!!!")))
@@ -737,7 +737,7 @@ annotation_cell_cluster_name <- function(data,new.cluster.ids){
   #data <- GENOMIC10XDATA_maritx_filted_normal_scale
   names(new.cluster.ids) <- levels(data)
   rename_data <- RenameIdents(data, new.cluster.ids)
-  p <-  DimPlot(rename_data, reduction = "tsne", label = TRUE, pt.size = 0.25,label.size=1.5) + NoLegend() +
+  p <-  DimPlot(rename_data, reduction = "tsne", label = TRUE, pt.size = 0.25,label.size=3) + NoLegend() +
     geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
     geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
     theme_classic()+
@@ -748,7 +748,8 @@ annotation_cell_cluster_name <- function(data,new.cluster.ids){
     theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
           plot.title = element_text(hjust = 0.5,size = 5),
           legend.position="right",
-          legend.title=element_text(size = 7,face="bold"), 
+          legend.title=element_text(size = 5,face="bold"),
+          legend.text = element_text(size = 5), 
           text = element_text(size = 4,family="sans"),           
           axis.title.x = element_text(size = 5),
           axis.title.y = element_text(size = 5),    
@@ -758,12 +759,12 @@ annotation_cell_cluster_name <- function(data,new.cluster.ids){
           axis.line.y=element_line(linetype=1,color="black",size=0.2),
           axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
           axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
-    guides(color=guide_legend(title="Cluster-ID",title.position = "top",override.aes = list(size=2,alpha=0.8)))
+    guides(color=guide_legend(title="Cluster-ID",title.position = "top",override.aes = list(size=3,alpha=0.8)))
   # save
-  ggsave(file.path(tSNE_annotation_plot_dir,paste0("tSNE-annotation-plot.pdf")),plot=p,width = 12,height = 8,units = "cm",device = "pdf")
-  ggsave(file.path(tSNE_annotation_plot_dir,paste0("tSNE-annotation-plot.png")),plot=p,width = 12,height = 8,units = "cm",device = "png",dpi=1000)
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("tSNE-annotation-plot.pdf")),plot=p,width = 10,height = 8,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("tSNE-annotation-plot.png")),plot=p,width = 10,height = 8,units = "cm",device = "png",dpi=1000)
   # print run condition
-  p <-  DimPlot(rename_data, reduction = "umap", label = TRUE, pt.size = 0.25,label.size=1.5) + NoLegend() +
+  p <-  DimPlot(rename_data, reduction = "umap", label = TRUE, pt.size = 0.25,label.size=3) + NoLegend() +
     geom_vline(xintercept=0,lty=4,col="black",lwd=0.3) +  
     geom_hline(yintercept = 0,lty=4,col="black",lwd=0.3) +
     theme_classic()+
@@ -774,7 +775,8 @@ annotation_cell_cluster_name <- function(data,new.cluster.ids){
     theme(panel.border = element_rect(linetype = 1, fill = NA,size=0.6),
           plot.title = element_text(hjust = 0.5,size = 5),
           legend.position="right",
-          legend.title=element_text(size = 7,face="bold"), 
+          legend.title=element_text(size = 5,face="bold"),
+          legend.text = element_text(size = 5), 
           text = element_text(size = 4,family="sans"),           
           axis.title.x = element_text(size = 5),
           axis.title.y = element_text(size = 5),    
@@ -784,10 +786,10 @@ annotation_cell_cluster_name <- function(data,new.cluster.ids){
           axis.line.y=element_line(linetype=1,color="black",size=0.2),
           axis.ticks.x=element_line(color="black",size=0.2,lineend = 1),
           axis.ticks.y=element_line(color="black",size=0.2,lineend = 1))+
-    guides(color=guide_legend(title="Cluster-ID",title.position = "top",override.aes = list(size=2,alpha=0.8)))
+    guides(color=guide_legend(title="Cluster-ID",title.position = "top",override.aes = list(size=3,alpha=0.8)))
   # save
-  ggsave(file.path(tSNE_annotation_plot_dir,paste0("UMAP-annotation-plot.pdf")),plot=p,width = 12,height = 8,units = "cm",device = "pdf")
-  ggsave(file.path(tSNE_annotation_plot_dir,paste0("UMAP-annotation-plot.png")),plot=p,width = 12,height = 8,units = "cm",device = "png",dpi=1000)
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("UMAP-annotation-plot.pdf")),plot=p,width = 10,height = 8,units = "cm",device = "pdf")
+  ggsave(file.path(tSNE_annotation_plot_dir,paste0("UMAP-annotation-plot.png")),plot=p,width = 10,height = 8,units = "cm",device = "png",dpi=1000)
   # print run condition
   return(rename_data)
 }
