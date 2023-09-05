@@ -1,3 +1,8 @@
+# author:zhang jian
+# date:2023.9.5
+# version:1.0v
+# description: this is scRNA-seq VENN ENRICHMENT
+##----------------------------------###---------------------------------------##
 # Function1: Create dir
 create_dir <- function(i){
   if(! dir.exists(i)){
@@ -470,7 +475,7 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     save_everyone_go_data(save_CC_result,"CC",save_data_dir_CC)
     # draw GO dag plot
     draw_other_plot_of_GO(gene.go.CC,"CC",save_dir_GO)
-    }
+  }
   print_color_note("GO analysis of CC (Cell Component) DONE!!!!!!")
   ##############################################
   print_color_note("GO analysis of MF (Molecular Function) DO!!!!!!")
@@ -528,10 +533,10 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     cat("NOT ENRICHMENT EVERYONE PATHWAYS")
     cat("\n")
   }else{
-      # deal longest GO Description
-      all_data$Description <- deal_longest_GO_Description(all_data$Description)
-      # draw all GO figure
-      draw_all_GO_figure(all_data,"all",save_name,save_dir_GO)
+    # deal longest GO Description
+    all_data$Description <- deal_longest_GO_Description(all_data$Description)
+    # draw all GO figure
+    draw_all_GO_figure(all_data,"all",save_name,save_dir_GO)
   }
   print_color_note("GO analysis of draw all GO result figure DONE!!!!!!")
   ##############################################
@@ -584,3 +589,4 @@ everyone_venn_data_enrichment <- function(){
     print_color_note_type4(paste0(name," KEGG-GO DONE!!!!"))
   }
 }
+##----------------------------------###---------------------------------------##
