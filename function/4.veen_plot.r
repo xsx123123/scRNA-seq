@@ -1,3 +1,8 @@
+# author:zhang jian
+# date:2023.9.5
+# version:1.0v
+# description: this is scRNA-seq VENN PLOT FUNCTION
+##----------------------------------###---------------------------------------##
 # Function1:CREATE dir
 create_dir <- function(list_dir){
   for (i in list_dir) {
@@ -83,6 +88,11 @@ data_down_deal <- function(){
 }
 # function5: draw veen plot
 draw_veen_plot <- function(data,name){
+  if (name == "Up"){
+    tag <- paste0(name," Gene Cutoff:p_val < ",Pvalue ," & LFC > ",LFC)
+  }else{
+    tag <- paste0(name," Gene Cutoff:p_val < ",Pvalue ," & LFC < ",LFC)
+  }
   # data <- up_list
   p <- ggVennDiagram(data,
                      set_color = c("red","blue"),
@@ -95,8 +105,9 @@ draw_veen_plot <- function(data,name){
                      edge_color = c("red","blue")) +
     scale_fill_distiller(palette = "Set3") +
     theme(legend.position = "none")+
-    annotate("text", x=500, y=180, size = 4,colour="black",label= paste0(name," Gene Cutoff:p_val < ",Pvalue ," & LFC > ",LFC))
+    annotate("text", x=500, y=180, size = 4,colour="black",label= tag )
   # save plot
   ggsave(filename = file.path(figure_dir,paste0("LFC > ",LFC,name,"-",name_list[1],"-",name_list[2],".pdf")),device = "pdf",height = 4,width = 5,plot = p)
   ggsave(filename = file.path(figure_dir,paste0("LFC > ",LFC,name,"-",name_list[1],"-",name_list[2],".png")),device = "png",height = 4,width = 5,plot = p,dpi=1200)
 }
+##----------------------------------###---------------------------------------##
