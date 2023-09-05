@@ -91,7 +91,7 @@ draw_veen_plot <- function(data,name){
   if (name == "Up"){
     tag <- paste0(name," Gene Cutoff:p_val < ",Pvalue ," & LFC > ",LFC)
   }else{
-    tag <- paste0(name," Gene Cutoff:p_val < ",Pvalue ," & LFC < ",LFC)
+    tag <- paste0(name," Gene Cutoff:p_val < ",Pvalue ," & LFC < ",-LFC)
   }
   # data <- up_list
   p <- ggVennDiagram(data,
