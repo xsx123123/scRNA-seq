@@ -37,6 +37,7 @@ deal_description <- function(ek.rt){
 }
 # Function5: Draw kegg plot
 kegg <- function(change_gene.KEGG,name,save_folder){
+  # change_gene.KEGG <- kegg_result
   ek.rt <- as.data.frame(change_gene.KEGG)
   ek.rt$Description <- deal_description(ek.rt)
   ek.rt <- separate(data=ek.rt, col=GeneRatio, into = c("GR1", "GR2"), sep = "/") 
@@ -46,18 +47,6 @@ kegg <- function(change_gene.KEGG,name,save_folder){
   ek.rt20_sort = arrange(ek.rt20, desc(Count))
   temp_data <- ek.rt20_sort %>% mutate(Description = fct_reorder(Description, Count ))
   # bot plot
-  p1 <- ggplot(data = ek.rt20,aes(x=enrichment_factor,y=Description)) + 
-    geom_point(aes(size=Count,color=qvalue)) +
-    scale_color_gradient(low="#fc4a1a",high = "#f7b733") + 
-    labs(color="pvalue",size="Count",x="Enrichment Factor",y="KEGG term",title="The Most Enriched KEGG Terms") + 
-    theme_test() +
-    theme(plot.title = element_text(size = 7, face = "bold",hjust = 0.5),
-          axis.title.x = element_text(size = 6,face = "bold", vjust = 0.5, hjust = 0.5),
-          axis.title.y = element_text(size = 6,face = "bold", vjust = 0.5, hjust = 0.5),
-          axis.text=element_text(size = 6,face = "bold", color="gray50"),
-          legend.key.size = unit(0.35, "cm"),
-          legend.title = element_text(size = 3, face = "bold",hjust = 0.5),
-          legend.text = element_text(size = 3, color = "gray50", face = "bold"))
   p2 <- ggplot(data=temp_data,aes(x=Description,y=Count,fill=enrichment_factor)) +
     geom_bar(stat="identity",width=0.8) + 
     scale_fill_gradient(low="#ffc0cb",high = "#800080") +
@@ -73,20 +62,21 @@ kegg <- function(change_gene.KEGG,name,save_folder){
           legend.key.size = unit(0.35, "cm"),
           legend.title = element_text(size = 3, face = "bold",hjust = 0.5),
           legend.text = element_text(size = 3, color = "gray50", face = "bold"))
-  p <- ggarrange(p1,p2,ncol=2,nrow=1,labels=c("A","B"))
-  ggsave(paste0("kegg_",name,".pdf"),plot = p,width = 25,height = 15,units="cm",device="pdf",path=save_folder)
-  ggsave(paste0("kegg_",name,".png"),plot = p,width = 25,height = 15,units="cm",device="png",path=save_folder,dpi=1000)
+  ggsave(paste0("kegg_",name,".pdf"),plot = p2,width = 10,height = 10,units="cm",device="pdf",path=save_folder)
+  ggsave(paste0("kegg_",name,".png"),plot = p2,width = 10,height = 10,units="cm",device="png",path=save_folder,dpi=1000)
 }
 # Function6: KEGG analysis
 KEGG <- function(gene_list,name,save_folder){
   # test parameter
   # gene_list <- pvalue_up_gene_list
+  # save_folder <- save_folder_KEGG
   # name <- "pvalue_up_kegg"
   # KEGG analysis
   kegg_id <- id_convert(gene_list)
   kegg_result <- kegg_gene_list(kegg_id$kegg)
   # if KEGG  result == NULL
-  if(dim(kegg_result)[1]==0){
+  kegg_data <- as.data.frame(kegg_result)
+  if(dim(kegg_data)[1]==0){
     cat("\n")
     cat(bgRed("WARRING!!!!!","\n"))
     cat(bgRed("Enrichment KEGG don't enrichment eveyone pathway","\n"))
@@ -415,8 +405,8 @@ draw_other_plot_of_GO <- function(GO_DATA,GO_NAME,save_dir_GO){
 GO_analysis <- function(gene_list,save_name,save_dir_GO){
   # test parameter
   # gene_list <- pvalue_up_gene_list
-  # save_name <- "UP"
-  # save_dir_GO <- save_folder_GO_UP
+  # save_name <- name 
+  # save_dir_GO <- save_folder_GO
   # get GO analysis gene list 
   # gene.go <- as.character(gene_list)
   # library annotation package
@@ -429,14 +419,16 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
                         ont = "BP",pvalueCutoff = 0.01,qvalueCutoff = 0.05)
   
   # gene.go.BP == NA
-  if (dim(gene.go.BP)[1] == 0){
+  gene.go.BP_data <- as.data.frame(gene.go.BP)
+  # gene.go.CC == NA
+  if (dim(gene.go.BP_data)[1] == 0){
     cat("\n")
-    cat(bgRed("WARRING!!!!!"))
-    cat(bgRed("Enrichment BP don't enrichment eveyone pathway"))
+    cat(bgRed("WARRING!!!!!","\n"))
+    cat(bgRed("Enrichment BP don't enrichment eveyone pathway","\n"))
     cat("\n")
-    save_BP_result <- as.data.frame(setReadable(gene.go.BP, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
+    save_BP_result <- data.frame(ID=NA,Description=NA,GeneRatio=NA,BgRatio=NA,pvalue=NA,p.adjust=NA,qvalue=NA,geneID=NA,Count=NA,type=NA,type_name=NA)
   }else{
-    # ID convert for BP
+    # ID convert for CC
     save_BP_result <- as.data.frame(setReadable(gene.go.BP, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
     write.csv(save_BP_result,file = file.path(save_dir_GO,paste0(save_name,"_GO_BP_enrichment_result.csv")))
     # deal longest GO Description
@@ -445,7 +437,7 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     # create dir
     save_data_dir_BP <- file.path(save_dir_GO,"top30_BP")
     create_dir(save_data_dir_BP)
-    # save GO data for BP
+    # save GO data for CC
     save_everyone_go_data(save_BP_result,"BP",save_data_dir_BP)
     # draw GO dag plot
     draw_other_plot_of_GO(gene.go.BP,"BP",save_dir_GO)
@@ -456,13 +448,14 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
   # enrichGO for CC
   gene.go.CC = enrichGO(gene = gene_list,OrgDb = org.Hs.eg.db,keyType = "SYMBOL",
                         ont = "CC",pvalueCutoff = 0.01,qvalueCutoff = 0.05)
+  gene.go.CC_data <- as.data.frame(gene.go.CC)
   # gene.go.CC == NA
-  if (dim(gene.go.CC)[1] == 0){
+  if (dim(gene.go.CC_data)[1] == 0){
     cat("\n")
     cat(bgRed("WARRING!!!!!","\n"))
     cat(bgRed("Enrichment CC don't enrichment eveyone pathway","\n"))
     cat("\n")
-    save_CC_result <- as.data.frame(setReadable(gene.go.CC, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
+    save_CC_result <- data.frame(ID=NA,Description=NA,GeneRatio=NA,BgRatio=NA,pvalue=NA,p.adjust=NA,qvalue=NA,geneID=NA,Count=NA,type=NA,type_name=NA)
   }else{
     # ID convert for CC
     save_CC_result <- as.data.frame(setReadable(gene.go.CC, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
@@ -477,7 +470,7 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     save_everyone_go_data(save_CC_result,"CC",save_data_dir_CC)
     # draw GO dag plot
     draw_other_plot_of_GO(gene.go.CC,"CC",save_dir_GO)
-  }
+    }
   print_color_note("GO analysis of CC (Cell Component) DONE!!!!!!")
   ##############################################
   print_color_note("GO analysis of MF (Molecular Function) DO!!!!!!")
@@ -485,16 +478,20 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
   gene.go.MF = enrichGO(gene = gene_list,OrgDb = org.Hs.eg.db,keyType = "SYMBOL",pAdjustMethod="fdr",
                         ont = "MF",pvalueCutoff = 0.01,qvalueCutoff = 0.05)
   # if gene.go.MF == NA
-  if (dim(gene.go.MF)[1] == 0){
+  gene.go.MF_data <- as.data.frame(gene.go.MF)
+  if (dim(gene.go.MF_data)[1] == 0){
     cat("\n")
     cat(bgRed("WARRING!!!!!","\n"))
     cat(bgRed("Enrichment MF don't enrichment eveyone pathway","\n"))
     cat("\n")
-    save_MF_result <- as.data.frame(setReadable(gene.go.MF, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
+    save_MF_result <- data.frame(ID=NA,Description=NA,GeneRatio=NA,BgRatio=NA,pvalue=NA,p.adjust=NA,qvalue=NA,geneID=NA,Count=NA,type=NA,type_name=NA)
   }else{
     # ID convert for MF
     save_MF_result <- as.data.frame(setReadable(gene.go.MF, OrgDb = org.Hs.eg.db, keyType="ENSEMBL"))
     write.csv(save_MF_result,file = file.path(save_dir_GO,paste0(save_name,"_GO_MF_enrichment_result.csv")))
+    # deal longest GO Description
+    save_MF_result$Description <- deal_longest_GO_Description(save_MF_result$Description)
+    draw_GO_figure(save_MF_result,"MF",save_name,save_dir_GO)
     # create dir
     save_data_dir_MF <- file.path(save_dir_GO,"top30_MF")
     create_dir(save_data_dir_MF)
@@ -502,9 +499,6 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     save_everyone_go_data(save_MF_result,"MF",save_data_dir_MF)
     # draw GO dag plot
     draw_other_plot_of_GO(gene.go.MF,"MF",save_dir_GO)
-    # deal longest GO Description
-    save_MF_result$Description <- deal_longest_GO_Description(save_MF_result$Description)
-    draw_GO_figure(save_MF_result,"MF",save_name,save_dir_GO)
   }
   print_color_note("GO analysis of MF (Molecular Function) DONE!!!!!!")
   ##############################################
@@ -534,12 +528,11 @@ GO_analysis <- function(gene_list,save_name,save_dir_GO){
     cat("NOT ENRICHMENT EVERYONE PATHWAYS")
     cat("\n")
   }else{
-    # deal longest GO Description
-    all_data$Description <- deal_longest_GO_Description(all_data$Description)
-    # draw all GO figure
-    draw_all_GO_figure(all_data,"all",save_name,save_dir_GO)
+      # deal longest GO Description
+      all_data$Description <- deal_longest_GO_Description(all_data$Description)
+      # draw all GO figure
+      draw_all_GO_figure(all_data,"all",save_name,save_dir_GO)
   }
-  
   print_color_note("GO analysis of draw all GO result figure DONE!!!!!!")
   ##############################################
 }
@@ -571,7 +564,7 @@ save_everyone_go_data <- function(result,name_dir,save_dir_GO){
 # Function20: deal everyone go kegg of venn data
 everyone_venn_data_enrichment <- function(){
   for (i in 1:length(venn_list)){
-    # i <- 1-
+    # i <- 1
     data_path <- file.path(root_dir,venn_list[i])
     name <- strsplit(venn_list[i],".csv")[[1]][1]
     # print run condition
